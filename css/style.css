@@ -1,0 +1,32 @@
+/*Style Sheet for GPA Calculator*/
+
+body{
+	font-family: "Open Sans", sans-serif;;
+	font-size: 1.5em;
+	margin: 0px;
+	padding: 0px;
+}
+h1{
+	font-size: 3em;
+}
+
+.table{
+	max-width:80%;
+	margin: 0 auto;
+}
+
+input{
+	max-width:50px;
+	text-align: center;
+}
+
+
+.table > tbody > tr > .infotext{
+	padding-top: 15px;
+}
+
+@media(max-width:768px){
+	.table{
+		max-width: 100%;
+	}
+}

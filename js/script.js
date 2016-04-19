@@ -1,0 +1,70 @@
+var app = angular.module('gpa', []);
+
+app.controller("calcCtrl", function($scope, $filter){
+
+  // Initialize
+  $scope.totalgpa = '?'; //Total GPA
+  var classCount = 1; //How many rows?
+  $scope.classes = [ //Add a class for placeholder
+    {name: 'Class 1', credit: 3, grade: 4}
+  ];
+
+  $scope.grades = [
+    {value: 4, text: 'A'},
+    {value: 3.5, text: 'B+'},
+    {value: 3, text: 'B'},
+    {value: 2, text: 'C'},
+    {value: 2.5, text: 'C+'},
+    {value: 1.5, text: 'D+'},
+    {value: 1, text: 'D'},
+    {value: 0, text: 'F'}
+  ];
+
+  // Remove Class
+  $scope.removeClass = function(index) {
+    // If it's the last column, set GPA to 0.
+    if($scope.classes.length == 1){
+      $scope.totalgpa = 0;
+    }
+    classCount--;
+    $scope.classes.splice(index, 1);
+    // Also need to update if it's removed
+    $scope.updateGPA();
+  };
+
+  // Add Class
+  $scope.addClass = function() {
+    classCount++;
+    $scope.inserted = {
+      id: $scope.classes.length+1,
+      name: "Class " + classCount,
+      credit: null,
+      grade: null
+    };
+    $scope.classes.push($scope.inserted);
+  };
+
+  // Update the total GPA. Formula for Rutgers is Credit of class times Grade divided by total credits.
+  $scope.updateGPA = function(){
+    var totalcredits = 0;
+    var quality = 0;
+    var i;
+    // Add total Credits
+    for(i = 0; i < $scope.classes.length; i++){
+      if($scope.classes[i].credit == null){
+        i++;
+      }
+      else{
+      totalcredits += parseInt($scope.classes[i].credit);
+      }
+    }
+    console.log("total Credits: " + totalcredits);
+    // Add Quality Points
+    for(i = 0; i < $scope.classes.length; i++){
+      quality += ($scope.classes[i].credit * $scope.classes[i].grade);
+    }
+    console.log("Quality: " + quality);
+    // Divide Quality Points by total credits
+    $scope.totalgpa = quality/totalcredits;
+  };
+});

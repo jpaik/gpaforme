@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="James Paik"/>
+	<meta name="description" content="GPA Calculator that will calculate your GPA in real time"/>
+	<meta name="keywords" content="GPA Calculator, Calculate GPA, GPA, Calculator"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content=""/>
+	<meta property="og:description" content="GPA Calculator that will calculate your GPA in real time"/>
+	<meta property="og:title" content="GPA Calculator"/>
+	<meta property="og:url" content="">
+
+	<title>GPA Calculator</title>
+	<link rel="icon" href="">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,700' rel='stylesheet' type='text/css'>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+
+	<script src="js/angular.min.js"></script>
+	<script src="js/script.js"></script>
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<div class="container text-center">
+		<h1>GPA Calculator</h1>
+		<div ng-app="gpa" ng-controller="calcCtrl">
+
+			<table class="table table-bordered">
+				<tr style="font-weight:bold; font-size:1.5em;">
+					<td>My GPA: {{(totalgpa | number) || '?'}}</td>
+				</tr>
+			</table>
+
+			<table class="table table-bordered table-hover">
+				<tr style="font-weight: bold">
+					<td style="width:45%">Name</td>
+					<td style="width:15%">Credits</td>
+					<td style="width:15%">Grade</td>
+					<td style="width:15%">Action</td>
+				</tr>
+
+				<tr ng-repeat="class in classes">
+					<td class="infotext">
+						<span id="name" e-name="name" e-form="rowform" e-required>
+							{{class.name}}
+						</span>
+					</td>
+
+					<td class="infotext">
+						<span e-required>
+							<input type="text" pattern="\d*" maxlength="1" ng-model="class.credit" ng-change="updateGPA()"></input>
+						</span>
+					</td>
+
+					<td class="infotext">
+						<span e-required>
+							<select ng-model="class.grade" ng-change="updateGPA()">
+								<option ng-selected="{{grade.value == filterCondition.grade}}" ng-repeat="grade in grades" value="{{grade.value}}">
+						       {{grade.text}}
+						     </option>
+							<select>
+						</span>
+					</td>
+
+					<td>
+						<div class="buttons" ng-show="!rowform.$visible">
+							<button class="btn btn-danger" ng-click="removeClass($index)">Remove</button>
+						</div>
+					</td>
+				</tr>
+
+			</table>
+			<br>
+			<button class="btn btn-default" ng-click="addClass()">Add a Class</button>
+		</div>
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
