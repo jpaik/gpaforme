@@ -15,6 +15,11 @@ app.controller("calcCtrl", function($scope, $filter){
       {value: 1, text: 'D'},
       {value: 0, text: 'F'}
     ];
+    $scope.levels = [ // For Highschool Levels
+      {value: 1, text: 'Academic'},
+      {value: 2, text: 'Honors'},
+      {value: 3, text: 'A.P.'}
+    ];
 
     //Check for local Storage
     $scope.saved = localStorage.getItem('classes');
@@ -70,6 +75,7 @@ app.controller("calcCtrl", function($scope, $filter){
 
   $scope.changeType = function(){
     if($scope.gpatype == 1){
+      $(".hs").addClass("hidden");
       $scope.grades = [
         {value: 4, text: 'A'},
         {value: 3.5, text: 'B+'},
@@ -82,6 +88,7 @@ app.controller("calcCtrl", function($scope, $filter){
       ];
     };
     if($scope.gpatype == 2){
+      $(".hs").addClass("hidden");
       $scope.grades = [
         {value: 4, text: 'A+'},
         {value: 4, text: 'A'},
@@ -98,6 +105,24 @@ app.controller("calcCtrl", function($scope, $filter){
         {value: 0, text: 'F'}
       ];
     };
+    if($scope.gpatype == 3){
+      $scope.grades = [
+        {value: 4.3, text: 'A+'},
+        {value: 4, text: 'A'},
+        {value: 3.7, text: 'A-'},
+        {value: 3.3, text: 'B+'},
+        {value: 3, text: 'B'},
+        {value: 2.7, text: 'B-'},
+        {value: 2.3, text: 'C+'},
+        {value: 2, text: 'C'},
+        {value: 1.7, text: 'C-'},
+        {value: 1.3, text: 'D+'},
+        {value: 1, text: 'D'},
+        {value: 0.7, text: 'D-'},
+        {value: 0, text: 'F'}
+      ];
+      $(".hs").removeClass("hidden");
+    };
   };
 
   // Update the total GPA. Formula is credit of class times grade received divided by total credits... I think
@@ -112,7 +137,21 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     // Add Quality Points
     for(i = 0; i < $scope.classes.length; i++){
-      quality += ($scope.classes[i].credit * $scope.classes[i].grade);
+      if($scope.gpatype == 3){ // Got to see if it's AP class or what not
+        if($scope.classes[i].level == 2){ // Honors has + .5 GPA
+          quality += ($scope.classes[i].credit * ($scope.classes[i].grade + 0.5));
+        }
+        else if($scope.classes[i].level == 3){ //AP has + 1.0 GPA
+          quality += ($scope.classes[i].credit * ($scope.classes[i].grade + 1.0));
+        }
+        else{
+          quality += ($scope.classes[i].credit * $scope.classes[i].grade);
+        }
+      }
+      else{ //Else, if it's college's so simple scale
+        quality += ($scope.classes[i].credit * $scope.classes[i].grade);
+      }
+
     }
     // Divide Quality Points by total credits to get GPA!
     $scope.totalgpa = quality/totalcredits;

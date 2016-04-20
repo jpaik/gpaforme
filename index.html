@@ -44,9 +44,10 @@
 				<!--GPA Calculator-->
 				<table class="table table-bordered table-hover">
 					<tr style="font-weight: bold">
-						<td style="width:45%">Name</td>
+						<td style="width:35%">Name</td>
 						<td style="width:15%">Credits</td>
 						<td style="width:15%">Grade</td>
+						<td style="width:15%" class="hidden hs">Level</td>
 						<td style="width:15%">Action</td>
 					</tr>
 
@@ -61,6 +62,10 @@
 
 						<td class="infotext">
 								<select ng-model="class.grade" ng-change="updateGPA()" ng-options="class.value as class.text for class in grades"></select>
+						</td>
+
+						<td class="infotext hidden hs">
+								<select ng-model="class.level" ng-change="updateGPA()" ng-options="class.value as class.text for class in levels"></select>
 						</td>
 
 						<td>
@@ -89,6 +94,7 @@
 					<select ng-init="gpatype = gpatype || '1'" ng-model="gpatype" ng-change="changeType()">
 						<option value="1">4.0 Scale (+)</option>
 						<option value="2">4.0 Scale (+/-)</option>
+						<option value="3">High School Scale</option>
 					</select>
 				</div>
 				<table class="table table-bordered">
