@@ -50,6 +50,9 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     else{
       $scope.semesters = JSON.parse($scope.savedSemesters);
+      if($scope.semesters.length < 1){
+        $scope.semesters = [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
+      }
       currentSemester = $scope.getSelected(); //This checks which semester was previously selected
       semesterCount = $scope.semesters.length;
     }
@@ -97,7 +100,6 @@ app.controller("calcCtrl", function($scope, $filter){
       classes: []
     }
     $scope.semesters.push($scope.inserted);
-    $scope.resetAll();
   };
 
   // Remove Semester
@@ -111,6 +113,7 @@ app.controller("calcCtrl", function($scope, $filter){
     $scope.semesters.splice(semesterCount, 1);
     // Also need to update if it's removed
     $scope.updateGPA();
+
   };
 
   // Get Semester
