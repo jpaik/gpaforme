@@ -227,11 +227,11 @@ app.controller("calcCtrl", function($scope, $filter){
     // CURRENT SEMESTER GPA CALC
     if($scope.semesters[currentSemester].classes != null){
       for(i = 0; i < $scope.semesters[currentSemester].classes.length; i++){
+        // Add credits for semester
         if(!isNaN(parseInt($scope.semesters[currentSemester].classes[i].credit))) //Make sure it's not NaN so it doesn't mess with total
           credits += parseInt($scope.semesters[currentSemester].classes[i].credit);
-      }
-      // Add Quality Points
-      for(i = 0; i < $scope.semesters[currentSemester].classes.length; i++){
+
+        // Add Quality Points for semester
         // Who the hell came up with Highschool GPA values??
         if($scope.gpatype == 3){ // Got to see if it's AP class or what not
           if($scope.semesters[currentSemester].classes[i].level == 2){ // Honors has + .5 GPA
@@ -255,8 +255,28 @@ app.controller("calcCtrl", function($scope, $filter){
     // CUMULATIVE GPA CALC
     if($scope.semesters != null){
       for(i = 0; i < $scope.semesters.length; i++){
+        for(var j = 0; j < $scope.semesters[i].classes.length; j++){
+          if(!isNaN(parseInt($scope.semesters[i].classes[j].credit))){
+            cumulativecredits += parseInt($scope.semesters[i].classes[j].credit);
+          }
 
+          if($scope.gpatype == 3){ // Got to see if it's AP class or what not
+            if($scope.semesters[i].classes[j].level == 2){ // Honors has + .5 GPA
+              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[ji].grade == 0 ? 0 :$scope.semesters[i].classes[j].grade + 0.5)); //make sure it's not 0
+            }
+            else if($scope.semesters[i].classes[j].level == 3){ //AP has + 1.0 GPA
+              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 : $scope.semesters[i].classes[j].grade + 1.0));
+            }
+            else{
+              cumulativequality += ($scope.semesters[i].classes[j].credit * $scope.semesters[i].classes[j].grade);
+            }
+          }
+          else{ //Else, if it's college's so simple scale
+            cumulativequality += ($scope.semesters[i].classes[j].credit * $scope.semesters[i].classes[j].grade);
+          }
+        }
       }
+      $scope.cumulativegpa = cumulativequality/cumulativecredits;
     }
   }
 
