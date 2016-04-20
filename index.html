@@ -28,58 +28,77 @@
 	<![endif]-->
 </head>
 
-<body>
-	<div class="container text-center">
-		<h1>GPA Calculator</h1>
-		<div ng-app="gpa" ng-controller="calcCtrl">
+<body ng-app="gpa" ng-controller="calcCtrl">
+	<div class="text-center">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<h1>GPA Calculator</h1>
 
-			<table class="table table-bordered">
-				<tr style="font-weight:bold; font-size:1.5em;">
-					<td>My GPA: {{(totalgpa | number) || '?'}}</td>
-				</tr>
-			</table>
+				<!--Final Calculated GPA-->
+				<table class="table">
+					<tr>
+						<td style="font-weight:bold; font-size:1.75em">My GPA: {{(totalgpa | number) || '?'}}</td>
+					</tr>
+				</table>
 
-			<table class="table table-bordered table-hover">
-				<tr style="font-weight: bold">
-					<td style="width:45%">Name</td>
-					<td style="width:15%">Credits</td>
-					<td style="width:15%">Grade</td>
-					<td style="width:15%">Action</td>
-				</tr>
+				<!--GPA Calculator-->
+				<table class="table table-bordered table-hover">
+					<tr style="font-weight: bold">
+						<td style="width:45%">Name</td>
+						<td style="width:15%">Credits</td>
+						<td style="width:15%">Grade</td>
+						<td style="width:15%">Action</td>
+					</tr>
 
-				<tr ng-repeat="class in classes">
-					<td class="infotext">
-						<span id="name" e-name="name" e-form="rowform" e-required>
-							{{class.name}}
-						</span>
-					</td>
+					<tr ng-repeat="class in classes">
+						<td class="infotext">
+							<span id="name" e-name="name" e-form="rowform" e-required>
+								{{class.name}}
+							</span>
+						</td>
 
-					<td class="infotext">
-						<span e-required>
-							<input type="text" pattern="\d*" maxlength="1" ng-model="class.credit" ng-change="updateGPA()"></input>
-						</span>
-					</td>
+						<td class="infotext">
+							<span e-required>
+								<input type="text" pattern="\d*" maxlength="1" ng-model="class.credit" ng-change="updateGPA()"></input>
+							</span>
+						</td>
 
-					<td class="infotext">
-						<span e-required>
-							<select ng-model="class.grade" ng-change="updateGPA()">
-								<option ng-selected="{{grade.value == filterCondition.grade}}" ng-repeat="grade in grades" value="{{grade.value}}">
-						       {{grade.text}}
-						     </option>
-							<select>
-						</span>
-					</td>
+						<td class="infotext">
+							<span e-required>
+								<select ng-model="class.grade" ng-change="updateGPA()" ng-options="class.value as class.text for class in grades"></select>
+							</span>
+						</td>
 
-					<td>
-						<div class="buttons" ng-show="!rowform.$visible">
-							<button class="btn btn-danger" ng-click="removeClass($index)">Remove</button>
-						</div>
-					</td>
-				</tr>
+						<td>
+							<div class="buttons" ng-show="!rowform.$visible">
+								<button class="btn btn-danger" ng-click="removeClass($index)">Remove</button>
+							</div>
+						</td>
+					</tr>
 
-			</table>
-			<br>
-			<button class="btn btn-default" ng-click="addClass()">Add a Class</button>
+				</table>
+				<br>
+				<button class="btn btn-default" ng-click="addClass()">Add a Class</button>
+			</div>
+
+
+			<!--Table for GPA Values-->
+			<div class="col-md-2">
+				<div class="tableright">
+					<h4>GPA Model</h4>
+					<select ng-init="gpatype = gpatype || '1'" ng-model="gpatype" ng-change="changeType()">
+						<option value="1">Only Plus</option>
+						<option value="2">Plus and Minus</option>
+					</select>
+				</div>
+				<table class="table table-bordered">
+					<tr ng-repeat="grade in grades">
+						<td>{{grade.text}}</td>
+						<td>{{grade.value}}</td>
+					</tr>
+				</table>
+			</div>
+
 		</div>
 	</div>
 

@@ -15,11 +15,19 @@ h1{
 	margin: 0 auto;
 }
 
+.row{
+	margin:0px;
+}
+
 input{
 	max-width:50px;
 	text-align: center;
 }
 
+.tableright{
+		padding-bottom: 20px;
+		padding-top:40px;
+}
 
 .table > tbody > tr > .infotext{
 	padding-top: 15px;
@@ -28,5 +36,11 @@ input{
 @media(max-width:768px){
 	.table{
 		max-width: 100%;
+	}
+	.tableright{
+		padding-top:20px;
+	}
+	.col-md-1 .table{
+		width: 60%;
 	}
 }

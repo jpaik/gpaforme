@@ -3,8 +3,8 @@ var app = angular.module('gpa', []);
 app.controller("calcCtrl", function($scope, $filter){
 
   // Initialize
-  $scope.totalgpa = '?'; //Total GPA
-  var classCount = 1; //How many rows?
+  $scope.totalgpa = 4; //Total GPA
+  var classCount = 1; //Count for amount of classes
   $scope.classes = [ //Add a class for placeholder
     {name: 'Class 1', credit: 3, grade: 4}
   ];
