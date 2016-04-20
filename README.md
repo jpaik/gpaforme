@@ -11,4 +11,5 @@ Connect to Database, maybe firebase?
 Add Login and Sign up to keep track of GPA progress.  
 Add semesters and whatnot.  
 Add a dashboard to see progress after the previous are implemented.  
+Add images and favicon.  
 Buy a custom domain and add a simple logo.  
