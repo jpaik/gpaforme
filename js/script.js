@@ -4,14 +4,6 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Initialize
   $scope.totalgpa = 4; //Total GPA
-  var classCount = 1; //Count for amount of classes
-  $scope.classes = [ //Add a class for placeholder
-    {credit: '', grade: 4},
-    {credit: '', grade: 4},
-    {credit: '', grade: 4},
-    {credit: '', grade: 4},
-    {credit: '', grade: 4}
-  ];
   $scope.grades = [ //Init GPA Values
     {value: 4, text: 'A'},
     {value: 3.5, text: 'B+'},
@@ -23,13 +15,17 @@ app.controller("calcCtrl", function($scope, $filter){
     {value: 0, text: 'F'}
   ];
 
+  //Check for local Storage
+  $scope.saved = localStorage.getItem('classes');
+  $scope.classes = (localStorage.getItem('classes') != null) ? JSON.parse($scope.saved) : [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+	localStorage.setItem('classes', JSON.stringify($scope.classes));
+
   // Remove Class
   $scope.removeClass = function(index) {
     // If it's the last column, set GPA to 0.
     if($scope.classes.length == 1){
       $scope.totalgpa = 0;
     }
-    classCount--;
     $scope.classes.splice(index, 1);
     // Also need to update if it's removed
     $scope.updateGPA();
@@ -37,10 +33,7 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Add Class
   $scope.addClass = function() {
-    classCount++;
     $scope.inserted = {
-      id: $scope.classes.length+1,
-      name: "Class " + classCount,
       credit: null,
       grade: null
     };
@@ -48,8 +41,12 @@ app.controller("calcCtrl", function($scope, $filter){
   };
 
   // Save inputs
-  $scope.save = function(){
-
+  $scope.saveClasses = function(){
+    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Save inputs to local storage
+    //Show Saved alert on click
+    $("#saveAlert").removeClass("in").show();
+    $("#saveAlert").removeClass("hidden");
+	  $("#saveAlert").delay(200).addClass("in").fadeOut(3000);
   };
 
   // Reset all values to null
@@ -60,6 +57,7 @@ app.controller("calcCtrl", function($scope, $filter){
       $scope.classes[i].credit = '';
       $scope.classes[i].grade = '';
     }
+    $scope.classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
   };
 
   $scope.changeType = function(){

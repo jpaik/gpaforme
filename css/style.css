@@ -34,6 +34,14 @@ h1{
 	padding-top: 15px;
 }
 
+#saveAlert{
+	width:300px;
+	margin:0 auto;
+	margin-top: 15px;
+}
+
+
+
 @media(max-width:768px){
 	.table{
 		max-width: 100%;
