@@ -43,8 +43,7 @@ app.controller("calcCtrl", function($scope, $filter){
     //Check for local Storage, and if not init default values
     $scope.savedSemesters = localStorage.getItem('semesters');
     $scope.savedtype = localStorage.getItem('gpatype');
-    console.log(localStorage.getItem('semesters'));
-    console.log($scope.savedSemesters);
+
     //If it's empty, create a new semester. Else, parse it from local storage
     if($scope.savedSemesters == undefined || ($scope.savedSemesters == null) || ($scope.savedSemesters == "undefined")){
       $scope.semesters = [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
@@ -71,7 +70,6 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Add Class
   $scope.addClass = function() {
-    console.log($scope.semesters[currentSemester]);
     $scope.inserted = {
       credit: null,
       grade: null
@@ -81,7 +79,6 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Remove Class
   $scope.removeClass = function(index) {
-    console.log($scope.semesters[currentSemester]);
     // If it's the last column, set GPA to 0.
     if($scope.semesters[currentSemester].classes.length == 1){
       $scope.semestergpa = 0;
@@ -154,7 +151,6 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Reset all values to null
   $scope.resetAll = function(){
-    console.log($scope.semesters[currentSemester]);
     var i;
     for(i = 0; i < $scope.semesters[currentSemester].classes.length; i ++){
       $scope.semesters[currentSemester].classes[i].name = '';
@@ -227,7 +223,6 @@ app.controller("calcCtrl", function($scope, $filter){
     var cumulativequality = 0;
     var cumulativecredits = 0;
     var i;
-    console.log($scope.semesters[currentSemester]);
 
     // CURRENT SEMESTER GPA CALC
     if($scope.semesters[currentSemester].classes != null){
