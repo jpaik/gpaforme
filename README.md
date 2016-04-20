@@ -5,7 +5,7 @@ This will calculate your GPA in real time.
 Check it out live [here](https://jpaik.github.io/angulargpa)
 
 ## To Do List
-~~Allow it to save inputs using cookies or local storage.~~
+~~Allow it to save inputs using cookies or local storage.~~  
 Connect to Database, maybe firebase?  
 Add Login and Sign up to keep track of GPA progress.  
 Add semesters and whatnot.  
