@@ -64,6 +64,12 @@ h1{
 }
 
 @media(max-width:768px){
+	body{
+		padding-bottom: 70px;
+	}
+	#footer{
+		height:50px;
+	}
 	.table{
 		max-width: 100%;
 	}
