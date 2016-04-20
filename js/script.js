@@ -157,10 +157,10 @@ app.controller("calcCtrl", function($scope, $filter){
       // Who the hell came up with Highschool GPA values??
       if($scope.gpatype == 3){ // Got to see if it's AP class or what not
         if($scope.classes[i].level == 2){ // Honors has + .5 GPA
-          quality += ($scope.classes[i].credit * ($scope.classes[i].grade + 0.5));
+          quality += ($scope.classes[i].credit * ($scope.classes[i].grade == 0 ? 0 :$scope.classes[i].grade + 0.5)); //make sure it's not 0
         }
         else if($scope.classes[i].level == 3){ //AP has + 1.0 GPA
-          quality += ($scope.classes[i].credit * ($scope.classes[i].grade + 1.0));
+          quality += ($scope.classes[i].credit * ($scope.classes[i].grade == 0 ? 0 : $scope.classes[i].grade + 1.0));
         }
         else{
           quality += ($scope.classes[i].credit * $scope.classes[i].grade);
