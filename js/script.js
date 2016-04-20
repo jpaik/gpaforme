@@ -97,6 +97,7 @@ app.controller("calcCtrl", function($scope, $filter){
       classes: []
     }
     $scope.semesters.push($scope.inserted);
+    $scope.resetAll();
   };
 
   // Remove Semester
