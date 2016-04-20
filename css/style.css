@@ -5,7 +5,23 @@ body{
 	font-size: 1.5em;
 	margin: 0px;
 	padding: 0px;
+	padding-bottom: 60px;
 }
+
+a, .btn, .table-hover > tbody > tr{
+	-webkit-transition: all ease 0.25s;
+  -moz-transition: all ease 0.25s;
+  -o-transition: all ease 0.25s;
+  transition: all ease 0.25s;
+}
+
+a:hover, a:focus, .btn:hover, .btn:focus, .table-hover > tbody > tr:hover{
+	-webkit-transition: all ease 0.25s;
+  -moz-transition: all ease 0.25s;
+  -o-transition: all ease 0.25s;
+  transition: all ease 0.25s;
+}
+
 h1{
 	font-size: 3em;
 	font-weight: 600;
@@ -39,8 +55,13 @@ h1{
 	margin:0 auto;
 	margin-top: 15px;
 }
-
-
+#footer{
+	height:40px;
+}
+#footer a{
+	text-decoration: none;
+	color:inherit;
+}
 
 @media(max-width:768px){
 	.table{
