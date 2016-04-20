@@ -98,9 +98,11 @@
 					</select>
 				</div>
 				<table class="table table-bordered">
-					<tr ng-repeat="grade in grades">
+					<tr ng-repeat="grade in grades" class-repeat-dir>
 						<td>{{grade.text}}</td>
 						<td>{{grade.value}}</td>
+						<td class="hs">{{grade.value + 0.5}}</td>
+						<td class="hs">{{grade.value + 1.0}}</td>
 					</tr>
 				</table>
 			</div>
