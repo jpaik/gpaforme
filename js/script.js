@@ -86,12 +86,8 @@ app.controller("calcCtrl", function($scope, $filter){
     var i;
     // Add total Credits
     for(i = 0; i < $scope.classes.length; i++){
-      if($scope.classes[i].credit == null){
-        i++;
-      }
-      else{
-      totalcredits += parseInt($scope.classes[i].credit);
-      }
+      if(!isNaN(parseInt($scope.classes[i].credit))) //Make sure it's not undef so it doesn't mess with total
+        totalcredits += parseInt($scope.classes[i].credit);
     }
     // Add Quality Points
     for(i = 0; i < $scope.classes.length; i++){
