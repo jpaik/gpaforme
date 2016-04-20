@@ -3,22 +3,29 @@ var app = angular.module('gpa', []);
 app.controller("calcCtrl", function($scope, $filter){
 
   // Initialize
-  $scope.totalgpa = 4; //Total GPA
-  $scope.grades = [ //Init GPA Values
-    {value: 4, text: 'A'},
-    {value: 3.5, text: 'B+'},
-    {value: 3, text: 'B'},
-    {value: 2.5, text: 'C+'},
-    {value: 2, text: 'C'},
-    {value: 1.5, text: 'D+'},
-    {value: 1, text: 'D'},
-    {value: 0, text: 'F'}
-  ];
+  $scope.init = function(){
+    $scope.totalgpa = 4; //Initial GPA
+    $scope.grades = [ //Init GPA Values
+      {value: 4, text: 'A'},
+      {value: 3.5, text: 'B+'},
+      {value: 3, text: 'B'},
+      {value: 2.5, text: 'C+'},
+      {value: 2, text: 'C'},
+      {value: 1.5, text: 'D+'},
+      {value: 1, text: 'D'},
+      {value: 0, text: 'F'}
+    ];
 
-  //Check for local Storage
-  $scope.saved = localStorage.getItem('classes');
-  $scope.classes = (localStorage.getItem('classes') != null) ? JSON.parse($scope.saved) : [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
-	localStorage.setItem('classes', JSON.stringify($scope.classes));
+    //Check for local Storage
+    $scope.saved = localStorage.getItem('classes');
+    $scope.classes = (localStorage.getItem('classes') != null) ? JSON.parse($scope.saved) : [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Set classes correctly.
+
+    // If local storage had values, then update the GPA to go with it
+    if (localStorage.getItem('classes') != null){
+      $scope.updateGPA();
+    }
+  };
 
   // Remove Class
   $scope.removeClass = function(index) {
@@ -57,6 +64,7 @@ app.controller("calcCtrl", function($scope, $filter){
       $scope.classes[i].credit = '';
       $scope.classes[i].grade = '';
     }
+    $scope.updateGPA();
     $scope.classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
   };
 
@@ -109,4 +117,7 @@ app.controller("calcCtrl", function($scope, $filter){
     // Divide Quality Points by total credits to get GPA!
     $scope.totalgpa = quality/totalcredits;
   };
+
+  // Let there be calculations!
+  $scope.init();
 });
