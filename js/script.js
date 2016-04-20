@@ -8,7 +8,6 @@ app.controller("calcCtrl", function($scope, $filter){
   $scope.classes = [ //Add a class for placeholder
     {name: 'Class 1', credit: 3, grade: 4}
   ];
-
   $scope.grades = [
     {value: 4, text: 'A'},
     {value: 3.5, text: 'B+'},
@@ -42,6 +41,38 @@ app.controller("calcCtrl", function($scope, $filter){
       grade: null
     };
     $scope.classes.push($scope.inserted);
+  };
+
+  $scope.changeType = function(){
+    if($scope.gpatype == 1){
+      $scope.grades = [
+        {value: 4, text: 'A'},
+        {value: 3.5, text: 'B+'},
+        {value: 3, text: 'B'},
+        {value: 2, text: 'C'},
+        {value: 2.5, text: 'C+'},
+        {value: 1.5, text: 'D+'},
+        {value: 1, text: 'D'},
+        {value: 0, text: 'F'}
+      ];
+    };
+    if($scope.gpatype == 2){
+      $scope.grades = [
+        {value: 4, text: 'A+'},
+        {value: 4, text: 'A'},
+        {value: 3.7, text: 'A-'},
+        {value: 3.3, text: 'B+'},
+        {value: 3, text: 'B'},
+        {value: 2.7, text: 'B-'},
+        {value: 2.3, text: 'C+'},
+        {value: 2, text: 'C'},
+        {value: 1.7, text: 'C-'},
+        {value: 1.3, text: 'D+'},
+        {value: 1, text: 'D'},
+        {value: 0.7, text: 'D-'},
+        {value: 0, text: 'F'}
+      ];
+    };
   };
 
   // Update the total GPA. Formula for Rutgers is Credit of class times Grade divided by total credits.
