@@ -47,11 +47,11 @@
 						<td style="width:35%">Name</td>
 						<td style="width:15%">Credits</td>
 						<td style="width:15%">Grade</td>
-						<td style="width:15%" class="hidden hs">Level</td>
+						<td style="width:15%" class="hs">Level</td>
 						<td style="width:15%">Action</td>
 					</tr>
 
-					<tr ng-repeat="class in classes">
+					<tr ng-repeat="class in classes" class-repeat-dir>
 						<td class="infotext">
 							<input ng-model="class.name" type="text"></input>
 						</td>
@@ -64,7 +64,7 @@
 								<select ng-model="class.grade" ng-change="updateGPA()" ng-options="class.value as class.text for class in grades"></select>
 						</td>
 
-						<td class="infotext hidden hs">
+						<td class="infotext hs">
 								<select ng-model="class.level" ng-change="updateGPA()" ng-options="class.value as class.text for class in levels"></select>
 						</td>
 

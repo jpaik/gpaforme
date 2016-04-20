@@ -1,7 +1,17 @@
 var app = angular.module('gpa', []);
 
-app.controller("calcCtrl", function($scope, $filter){
+// Make sure that the levels are hidden if it's not highschool.
+app.directive('classRepeatDir', function(){
+  return function($scope){
+    if($scope.gpatype != 3){
+      if($scope.$last){
+        $(".hs").addClass("hidden");
+      }
+    }
+  }
+});
 
+app.controller("calcCtrl", function($scope, $filter){
   // Initialize
   $scope.init = function(){
     $scope.totalgpa = 4; //Initial GPA
@@ -21,14 +31,18 @@ app.controller("calcCtrl", function($scope, $filter){
       {value: 3, text: 'A.P.'}
     ];
 
-    //Check for local Storage
+    //Check for local Storage, and if not init default values
     $scope.saved = localStorage.getItem('classes');
+    $scope.savedtype = localStorage.getItem('gpatype');
     $scope.classes = (localStorage.getItem('classes') != null) ? JSON.parse($scope.saved) : [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    $scope.gpatype = (localStorage.getItem('gpatype') != null) ? JSON.parse($scope.savedtype) : 1;
     localStorage.setItem('classes', JSON.stringify($scope.classes)); //Set classes correctly.
+    localStorage.setItem('gpatype', JSON.stringify($scope.gpatype)); //Set GPA tyle correctly
 
-    // If local storage had values, then update the GPA to go with it
+    // If local storage had values, then update the GPA and type to go with it
     if (localStorage.getItem('classes') != null){
       $scope.updateGPA();
+      $scope.changeType();
     }
   };
 
@@ -54,7 +68,8 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Save inputs
   $scope.saveClasses = function(){
-    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Save inputs to local storage
+    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Save classes to local storage
+    localStorage.setItem('gpatype', JSON.stringify($scope.gpatype)); //Save GPA type to local storage
     //Show Saved alert on click
     $("#saveAlert").removeClass("in").show();
     $("#saveAlert").removeClass("hidden");
@@ -70,7 +85,9 @@ app.controller("calcCtrl", function($scope, $filter){
       $scope.classes[i].grade = '';
     }
     $scope.updateGPA();
-    $scope.classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    if($scope.gpatype != 3){
+        $scope.classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    }
   };
 
   $scope.changeType = function(){
@@ -137,6 +154,7 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     // Add Quality Points
     for(i = 0; i < $scope.classes.length; i++){
+      // Who the hell came up with Highschool GPA values??
       if($scope.gpatype == 3){ // Got to see if it's AP class or what not
         if($scope.classes[i].level == 2){ // Honors has + .5 GPA
           quality += ($scope.classes[i].credit * ($scope.classes[i].grade + 0.5));
