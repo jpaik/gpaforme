@@ -79,7 +79,7 @@ app.controller("calcCtrl", function($scope, $filter){
     };
   };
 
-  // Update the total GPA. Formula for Rutgers is Credit of class times Grade divided by total credits.
+  // Update the total GPA. Formula is credit of class times grade received divided by total credits.
   $scope.updateGPA = function(){
     var totalcredits = 0;
     var quality = 0;
@@ -93,12 +93,10 @@ app.controller("calcCtrl", function($scope, $filter){
       totalcredits += parseInt($scope.classes[i].credit);
       }
     }
-    console.log("total Credits: " + totalcredits);
     // Add Quality Points
     for(i = 0; i < $scope.classes.length; i++){
       quality += ($scope.classes[i].credit * $scope.classes[i].grade);
     }
-    console.log("Quality: " + quality);
     // Divide Quality Points by total credits
     $scope.totalgpa = quality/totalcredits;
   };
