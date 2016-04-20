@@ -87,8 +87,8 @@
 				<div class="tableright">
 					<h4>GPA Model</h4>
 					<select ng-init="gpatype = gpatype || '1'" ng-model="gpatype" ng-change="changeType()">
-						<option value="1">Only Plus</option>
-						<option value="2">Plus and Minus</option>
+						<option value="1">4.0 Scale (+)</option>
+						<option value="2">4.0 Scale (+/-)</option>
 					</select>
 				</div>
 				<table class="table table-bordered">
@@ -99,6 +99,14 @@
 				</table>
 			</div>
 
+		</div>
+
+		<div id="footer" class="navbar navbar-default navbar-fixed-bottom">
+			<div class="container text-center">
+				<p class="navbar-text col-md-12 col-sm-12 col-xs-12">
+					Created by <a href="http://jpaik.me">James Paik</a> | View code on <a href="http://github.com/jpaik/angulargpa">GitHub</a>
+				</p>
+			</div>
 		</div>
 	</div>
 
