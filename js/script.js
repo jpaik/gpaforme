@@ -25,6 +25,11 @@ app.controller("calcCtrl", function($scope, $filter){
       {value: 1, text: 'D'},
       {value: 0, text: 'F'}
     ];
+    $scope.gpatypes = [ //Init GPA Types
+      {value: 1, text: '4.0 Scale (+)'},
+      {value: 2, text: '4.0 Scale (+/-)'},
+      {value: 3, text: 'High School Scale'}
+    ];
     $scope.levels = [ // For Highschool Levels
       {value: 1, text: 'Academic'},
       {value: 2, text: 'Honors'},

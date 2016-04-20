@@ -88,11 +88,7 @@
 			<div class="col-md-2">
 				<div class="tableright">
 					<h4>GPA Model</h4>
-					<select ng-init="gpatype = gpatype || '1'" ng-model="gpatype" ng-change="changeType()">
-						<option value="1">4.0 Scale (+)</option>
-						<option value="2">4.0 Scale (+/-)</option>
-						<option value="3">High School Scale</option>
-					</select>
+					<select ng-init="gpatype = gpatype || '1'" ng-model="gpatype" ng-change="changeType()" ng-options="gpatype.value as gpatype.text for gpatype in gpatypes"></select>
 				</div>
 				<table class="table table-bordered">
 					<tr ng-repeat="grade in grades" class-repeat-dir>
