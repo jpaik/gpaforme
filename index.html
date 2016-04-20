@@ -28,13 +28,25 @@
 <body ng-app="gpa" ng-controller="calcCtrl">
 	<div class="text-center">
 		<div class="row">
-			<div class="col-md-8 col-md-offset-2">
+			<div class="col-md-2">
+				<div class="tableleft">
+					<h4>Semesters</h4>
+					<table class="table">
+						<tr ng-repeat="semester in semesters">
+							<td class="{{semester.selected}}"><a ng-click="getSemester($index)">{{semester.name}}</a></td>
+						</tr>
+					</table>
+					<button class="btn btn-default btn-small" ng-click="addSemester()">+</button><button class="btn btn-small btn-danger" ng-click="removeSemester()">-</button>
+				</div>
+			</div>
+			<div class="col-md-8">
 				<h1>GPA Calculator</h1>
 
 				<!--Final Calculated GPA-->
 				<table class="table">
 					<tr>
-						<td style="font-weight:bold; font-size:1.75em">My GPA: {{(totalgpa | number: 3) || '?'}}</td>
+						<td style="font-weight:bold; font-size:1.75em">Semester GPA: {{(semestergpa | number: 3) || '?'}}</td>
+						<td ng-show="semesters.length > 1" style="font-weight:bold; font-size:1.75em">Cumulative GPA: {{(cumulativegpa | number: 3) || '?'}}</td>
 					</tr>
 				</table>
 
@@ -48,7 +60,7 @@
 						<td style="width:15%">Action</td>
 					</tr>
 
-					<tr ng-repeat="class in classes" class-repeat-dir>
+					<tr ng-repeat="class in selected_semester.classes" class-repeat-dir>
 						<td class="infotext">
 							<input ng-model="class.name" type="text"></input>
 						</td>

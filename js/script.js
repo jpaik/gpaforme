@@ -13,8 +13,12 @@ app.directive('classRepeatDir', function(){
 
 app.controller("calcCtrl", function($scope, $filter){
   // Initialize
+  var semesterCount = 1;
+  var currentSemester = 0;
   $scope.init = function(){
-    $scope.totalgpa = 4; //Initial GPA
+    $scope.cumulativegpa = '?'; //Initial GPA
+    $scope.semestergpa = 4;
+
     $scope.grades = [ //Init GPA Values
       {value: 4, text: 'A'},
       {value: 3.5, text: 'B+'},
@@ -37,44 +41,111 @@ app.controller("calcCtrl", function($scope, $filter){
     ];
 
     //Check for local Storage, and if not init default values
-    $scope.saved = localStorage.getItem('classes');
+    $scope.savedSemesters = localStorage.getItem('semesters');
     $scope.savedtype = localStorage.getItem('gpatype');
-    $scope.classes = (localStorage.getItem('classes') != null) ? JSON.parse($scope.saved) : [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    console.log(localStorage.getItem('semesters'));
+    console.log($scope.savedSemesters);
+    //If it's empty, create a new semester. Else, parse it from local storage
+    if($scope.savedSemesters == undefined || ($scope.savedSemesters == null) || ($scope.savedSemesters == "undefined")){
+      $scope.semesters = [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
+    }
+    else{
+      $scope.semesters = JSON.parse($scope.savedSemesters);
+      currentSemester = $scope.getSelected(); //This checks which semester was previously selected
+      semesterCount = $scope.semesters.length;
+    }
+    //$scope.semesters = (typeof localStorage.getItem('semesters') !== 'undefined') ? JSON.parse($scope.savedSemesters) : [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
     $scope.gpatype = (localStorage.getItem('gpatype') != null) ? JSON.parse($scope.savedtype) : 1;
-    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Set classes correctly.
-    localStorage.setItem('gpatype', JSON.stringify($scope.gpatype)); //Set GPA tyle correctly
+    localStorage.setItem('semesters', angular.toJson($scope.semesters)); //Set semesters correctly.
+    localStorage.setItem('gpatype', angular.toJson($scope.gpatype)); //Set GPA tyle correctly
 
     // If local storage had values, then update the GPA and type to go with it
-    if (localStorage.getItem('classes') != null){
+    if (localStorage.getItem('semesters') != null){
       $scope.updateGPA();
       $scope.changeType();
     }
-  };
 
-  // Remove Class
-  $scope.removeClass = function(index) {
-    // If it's the last column, set GPA to 0.
-    if($scope.classes.length == 1){
-      $scope.totalgpa = 0;
-    }
-    $scope.classes.splice(index, 1);
-    // Also need to update if it's removed
-    $scope.updateGPA();
+    //On load, make sure the selected semester is current semester
+    $scope.selected_semester = $scope.semesters[currentSemester];
   };
 
   // Add Class
   $scope.addClass = function() {
+    console.log($scope.semesters[currentSemester]);
     $scope.inserted = {
       credit: null,
       grade: null
     };
-    $scope.classes.push($scope.inserted);
+    $scope.semesters[currentSemester].classes.push($scope.inserted);
   };
+
+  // Remove Class
+  $scope.removeClass = function(index) {
+    console.log($scope.semesters[currentSemester]);
+    // If it's the last column, set GPA to 0.
+    if($scope.semesters[currentSemester].classes.length == 1){
+      $scope.semestergpa = 0;
+    }
+    $scope.semesters[currentSemester].classes.splice(index, 1);
+    // Also need to update if it's removed
+    $scope.updateGPA();
+  };
+
+  // Add Semester
+  $scope.addSemester = function(){
+    semesterCount++;
+    $scope.inserted = {
+      value: semesterCount,
+      name: "Semester " + semesterCount,
+      classes: []
+    }
+    $scope.semesters.push($scope.inserted);
+  };
+
+  // Remove Semester
+  $scope.removeSemester = function() {
+    // If it's the last column, set GPA to 0.
+    if($scope.semesters.length == 1){
+      $scope.semestergpa = 0;
+      semesterCount = 1;
+    }
+    semesterCount--;
+    $scope.semesters.splice(semesterCount, 1);
+    // Also need to update if it's removed
+    $scope.updateGPA();
+  };
+
+  // Get Semester
+  $scope.getSemester = function(index){
+    var i;
+    for(i = 0; i < $scope.semesters.length; i++){
+      if(i == index){
+        $scope.semesters[i].selected = 'selected';
+        currentSemester = i;
+        $scope.selected_semester = $scope.semesters[i];
+      }
+      else{
+        $scope.semesters[i].selected = '';
+      }
+    }
+    $scope.updateGPA();
+  };
+
+  // Returns the index of the previously selected semester
+  $scope.getSelected = function(){
+    var i;
+    for(i = 0; i < $scope.semesters.length; i++){
+      if($scope.semesters[i].selected == 'selected'){
+        return i;
+      }
+    }
+    return 0;
+  }
 
   // Save inputs
   $scope.saveClasses = function(){
-    localStorage.setItem('classes', JSON.stringify($scope.classes)); //Save classes to local storage
-    localStorage.setItem('gpatype', JSON.stringify($scope.gpatype)); //Save GPA type to local storage
+    localStorage.setItem('semesters', angular.toJson($scope.semesters)); //Save classes to local storage
+    localStorage.setItem('gpatype', angular.toJson($scope.gpatype)); //Save GPA type to local storage
     //Show Saved alert on click
     $("#saveAlert").removeClass("in").show();
     $("#saveAlert").removeClass("hidden");
@@ -83,18 +154,20 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Reset all values to null
   $scope.resetAll = function(){
+    console.log($scope.semesters[currentSemester]);
     var i;
-    for(i = 0; i < $scope.classes.length; i ++){
-      $scope.classes[i].name = '';
-      $scope.classes[i].credit = '';
-      $scope.classes[i].grade = '';
+    for(i = 0; i < $scope.semesters[currentSemester].classes.length; i ++){
+      $scope.semesters[currentSemester].classes[i].name = '';
+      $scope.semesters[currentSemester].classes[i].credit = '';
+      $scope.semesters[currentSemester].classes[i].grade = '';
     }
     $scope.updateGPA();
     if($scope.gpatype != 3){
-        $scope.classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+        $scope.semesters[currentSemester].classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
     }
   };
 
+  // Changes the GPA Model
   $scope.changeType = function(){
     if($scope.gpatype == 1){
       $(".hs").addClass("hidden");
@@ -149,36 +222,50 @@ app.controller("calcCtrl", function($scope, $filter){
 
   // Update the total GPA. Formula is credit of class times grade received divided by total credits... I think
   $scope.updateGPA = function(){
-    var totalcredits = 0;
     var quality = 0;
+    var credits = 0;
+    var cumulativequality = 0;
+    var cumulativecredits = 0;
     var i;
-    // Add total Credits
-    for(i = 0; i < $scope.classes.length; i++){
-      if(!isNaN(parseInt($scope.classes[i].credit))) //Make sure it's not NaN so it doesn't mess with total
-        totalcredits += parseInt($scope.classes[i].credit);
-    }
-    // Add Quality Points
-    for(i = 0; i < $scope.classes.length; i++){
-      // Who the hell came up with Highschool GPA values??
-      if($scope.gpatype == 3){ // Got to see if it's AP class or what not
-        if($scope.classes[i].level == 2){ // Honors has + .5 GPA
-          quality += ($scope.classes[i].credit * ($scope.classes[i].grade == 0 ? 0 :$scope.classes[i].grade + 0.5)); //make sure it's not 0
-        }
-        else if($scope.classes[i].level == 3){ //AP has + 1.0 GPA
-          quality += ($scope.classes[i].credit * ($scope.classes[i].grade == 0 ? 0 : $scope.classes[i].grade + 1.0));
-        }
-        else{
-          quality += ($scope.classes[i].credit * $scope.classes[i].grade);
-        }
-      }
-      else{ //Else, if it's college's so simple scale
-        quality += ($scope.classes[i].credit * $scope.classes[i].grade);
-      }
+    console.log($scope.semesters[currentSemester]);
 
+    // CURRENT SEMESTER GPA CALC
+    if($scope.semesters[currentSemester].classes != null){
+      for(i = 0; i < $scope.semesters[currentSemester].classes.length; i++){
+        if(!isNaN(parseInt($scope.semesters[currentSemester].classes[i].credit))) //Make sure it's not NaN so it doesn't mess with total
+          credits += parseInt($scope.semesters[currentSemester].classes[i].credit);
+      }
+      // Add Quality Points
+      for(i = 0; i < $scope.semesters[currentSemester].classes.length; i++){
+        // Who the hell came up with Highschool GPA values??
+        if($scope.gpatype == 3){ // Got to see if it's AP class or what not
+          if($scope.semesters[currentSemester].classes[i].level == 2){ // Honors has + .5 GPA
+            quality += ($scope.semesters[currentSemester].classes[i].credit * ($scope.semesters[currentSemester].classes[i].grade == 0 ? 0 :$scope.semesters[currentSemester].classes[i].grade + 0.5)); //make sure it's not 0
+          }
+          else if($scope.semesters[currentSemester].classes[i].level == 3){ //AP has + 1.0 GPA
+            quality += ($scope.semesters[currentSemester].classes[i].credit * ($scope.semesters[currentSemester].classes[i].grade == 0 ? 0 : $scope.semesters[currentSemester].classes[i].grade + 1.0));
+          }
+          else{
+            quality += ($scope.semesters[currentSemester].classes[i].credit * $scope.semesters[currentSemester].classes[i].grade);
+          }
+        }
+        else{ //Else, if it's college's so simple scale
+          quality += ($scope.semesters[currentSemester].classes[i].credit * $scope.semesters[currentSemester].classes[i].grade);
+        }
+      }
+      // Divide Quality Points by total credits to get GPA!
+      $scope.semestergpa = quality/credits;
+    };
+
+    // CUMULATIVE GPA CALC
+    if($scope.semesters != null){
+      for(i = 0; i < $scope.semesters.length; i++){
+
+      }
     }
-    // Divide Quality Points by total credits to get GPA!
-    $scope.totalgpa = quality/totalcredits;
-  };
+  }
+
+  //Runtime? O(n) where n is semester's classes length.
 
   // Let there be calculations!
   $scope.init();
