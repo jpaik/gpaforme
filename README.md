@@ -7,9 +7,9 @@ Check it out live [here](http://gpafor.me)
 ## To Do List
 ~~Allow it to save inputs using cookies or local storage.~~  
 ~~Add more GPA Models like Highschool AP classes.~~  
-Connect to Database, maybe firebase?  
+Add semesters into calculations.  
 Add Login and Sign up to keep track of GPA progress.  
-Add semesters and whatnot.  
+Connect to Database, maybe firebase?  
 Add a dashboard to see progress after the previous are implemented.  
 Add images and favicon.  
 ~~Buy a custom domain~~ and add a simple logo.  
