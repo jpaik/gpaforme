@@ -3,11 +3,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="author" content="James Paik"/>
-	<meta name="description" content="GPA Calculator that will calculate your GPA in real time"/>
+	<meta name="description" content="GPA Calculator that will calculate your GPA in real time."/>
 	<meta name="keywords" content="GPA Calculator, Calculate GPA, GPA, Calculator"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta property="og:image" content=""/>
-	<meta property="og:description" content="GPA Calculator that will calculate your GPA in real time"/>
+	<meta property="og:description" content="GPA Calculator that will calculate your GPA in real time."/>
 	<meta property="og:title" content="GPA Calculator"/>
 	<meta property="og:url" content="">
 
@@ -37,7 +37,7 @@
 				<!--Final Calculated GPA-->
 				<table class="table">
 					<tr>
-						<td style="font-weight:bold; font-size:1.75em">My GPA: {{(totalgpa | number) || '?'}}</td>
+						<td style="font-weight:bold; font-size:1.75em">My GPA: {{(totalgpa | number: 3) || '?'}}</td>
 					</tr>
 				</table>
 
@@ -52,7 +52,7 @@
 
 					<tr ng-repeat="class in classes">
 						<td class="infotext">
-							<input type="text"></input>
+							<input ng-model="class.name" type="text"></input>
 						</td>
 
 						<td class="infotext">
@@ -73,6 +73,8 @@
 				</table>
 				<br>
 				<button class="btn btn-default" ng-click="addClass()">Add a Class</button>
+				<button class="btn btn-primary" ng-click="save()">Save Classes</button>
+				<button class="btn btn-danger" ng-click="resetAll()">Reset All</button>
 			</div>
 
 

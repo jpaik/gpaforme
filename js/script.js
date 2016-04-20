@@ -47,6 +47,21 @@ app.controller("calcCtrl", function($scope, $filter){
     $scope.classes.push($scope.inserted);
   };
 
+  // Save inputs
+  $scope.save = function(){
+
+  };
+
+  // Reset all values to null
+  $scope.resetAll = function(){
+    var i;
+    for(i = 0; i < $scope.classes.length; i ++){
+      $scope.classes[i].name = '';
+      $scope.classes[i].credit = '';
+      $scope.classes[i].grade = '';
+    }
+  };
+
   $scope.changeType = function(){
     if($scope.gpatype == 1){
       $scope.grades = [
@@ -79,21 +94,21 @@ app.controller("calcCtrl", function($scope, $filter){
     };
   };
 
-  // Update the total GPA. Formula is credit of class times grade received divided by total credits.
+  // Update the total GPA. Formula is credit of class times grade received divided by total credits... I think
   $scope.updateGPA = function(){
     var totalcredits = 0;
     var quality = 0;
     var i;
     // Add total Credits
     for(i = 0; i < $scope.classes.length; i++){
-      if(!isNaN(parseInt($scope.classes[i].credit))) //Make sure it's not undef so it doesn't mess with total
+      if(!isNaN(parseInt($scope.classes[i].credit))) //Make sure it's not NaN so it doesn't mess with total
         totalcredits += parseInt($scope.classes[i].credit);
     }
     // Add Quality Points
     for(i = 0; i < $scope.classes.length; i++){
       quality += ($scope.classes[i].credit * $scope.classes[i].grade);
     }
-    // Divide Quality Points by total credits
+    // Divide Quality Points by total credits to get GPA!
     $scope.totalgpa = quality/totalcredits;
   };
 });

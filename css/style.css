@@ -8,6 +8,7 @@ body{
 }
 h1{
 	font-size: 3em;
+	font-weight: 600;
 }
 
 .table{
@@ -42,5 +43,8 @@ h1{
 	}
 	.col-md-2 .table{
 		width: 60%;
+	}
+	input{
+		width:100%;
 	}
 }
