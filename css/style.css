@@ -45,6 +45,26 @@ h1{
 		padding-bottom: 20px;
 		padding-top:40px;
 }
+.tableleft{
+	padding-bottom: 20px;
+	padding-top:40px;
+}
+
+td.selected a{
+	font-weight: bold;
+	padding: 5px 10px;
+}
+td a, td a:hover{
+	cursor: pointer;
+	text-decoration: none;
+	color:black;
+}
+
+.btn-small{
+	padding: 2px 8px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
 
 .table > tbody > tr > .infotext{
 	padding-top: 15px;
@@ -75,6 +95,9 @@ h1{
 	}
 	.tableright{
 		padding-top:20px;
+	}
+	.tableleft{
+		padding-top:0px;
 	}
 	.col-md-2 .table{
 		width: 60%;
