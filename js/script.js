@@ -264,9 +264,9 @@ app.controller("calcCtrl", function($scope, $filter){
             cumulativecredits += parseInt($scope.semesters[i].classes[j].credit);
           }
 
-          if($scope.gpatype == 3){ // Got to see if it's AP class or what not
+          if($scope.gpatype == 3){
             if($scope.semesters[i].classes[j].level == 2){ // Honors has + .5 GPA
-              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[ji].grade == 0 ? 0 :$scope.semesters[i].classes[j].grade + 0.5)); //make sure it's not 0
+              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 :$scope.semesters[i].classes[j].grade + 0.5)); //make sure it's not 0
             }
             else if($scope.semesters[i].classes[j].level == 3){ //AP has + 1.0 GPA
               cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 : $scope.semesters[i].classes[j].grade + 1.0));
