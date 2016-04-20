@@ -52,21 +52,15 @@
 
 					<tr ng-repeat="class in classes">
 						<td class="infotext">
-							<span id="name" e-name="name" e-form="rowform" e-required>
-								{{class.name}}
-							</span>
+							<input type="text"></input>
 						</td>
 
 						<td class="infotext">
-							<span e-required>
-								<input type="text" pattern="\d*" maxlength="1" ng-model="class.credit" ng-change="updateGPA()"></input>
-							</span>
+							<input id="credits" type="text" pattern="\d*" maxlength="1" ng-model="class.credit" ng-change="updateGPA()"></input>
 						</td>
 
 						<td class="infotext">
-							<span e-required>
 								<select ng-model="class.grade" ng-change="updateGPA()" ng-options="class.value as class.text for class in grades"></select>
-							</span>
 						</td>
 
 						<td>

@@ -6,14 +6,18 @@ app.controller("calcCtrl", function($scope, $filter){
   $scope.totalgpa = 4; //Total GPA
   var classCount = 1; //Count for amount of classes
   $scope.classes = [ //Add a class for placeholder
-    {name: 'Class 1', credit: 3, grade: 4}
+    {credit: '', grade: 4},
+    {credit: '', grade: 4},
+    {credit: '', grade: 4},
+    {credit: '', grade: 4},
+    {credit: '', grade: 4}
   ];
-  $scope.grades = [
+  $scope.grades = [ //Init GPA Values
     {value: 4, text: 'A'},
     {value: 3.5, text: 'B+'},
     {value: 3, text: 'B'},
-    {value: 2, text: 'C'},
     {value: 2.5, text: 'C+'},
+    {value: 2, text: 'C'},
     {value: 1.5, text: 'D+'},
     {value: 1, text: 'D'},
     {value: 0, text: 'F'}
@@ -49,8 +53,8 @@ app.controller("calcCtrl", function($scope, $filter){
         {value: 4, text: 'A'},
         {value: 3.5, text: 'B+'},
         {value: 3, text: 'B'},
-        {value: 2, text: 'C'},
         {value: 2.5, text: 'C+'},
+        {value: 2, text: 'C'},
         {value: 1.5, text: 'D+'},
         {value: 1, text: 'D'},
         {value: 0, text: 'F'}
