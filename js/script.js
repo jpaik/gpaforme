@@ -50,13 +50,12 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     else{
       $scope.semesters = JSON.parse($scope.savedSemesters);
-      if($scope.semesters.length < 1){
+      if($scope.semesters.length < 1){ // Just incase.
         $scope.semesters = [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
       }
       currentSemester = $scope.getSelected(); //This checks which semester was previously selected
       semesterCount = $scope.semesters.length;
     }
-    //$scope.semesters = (typeof localStorage.getItem('semesters') !== 'undefined') ? JSON.parse($scope.savedSemesters) : [{value: 1, name: 'Semester 1', selected: 'selected', classes: [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}]}];
     $scope.gpatype = (localStorage.getItem('gpatype') != null) ? JSON.parse($scope.savedtype) : 1;
     localStorage.setItem('semesters', angular.toJson($scope.semesters)); //Set semesters correctly.
     localStorage.setItem('gpatype', angular.toJson($scope.gpatype)); //Set GPA tyle correctly
@@ -115,8 +114,6 @@ app.controller("calcCtrl", function($scope, $filter){
     $scope.semesters.splice(semesterCount, 1);
     // Switch to previous semester
     $scope.getSemester(semesterCount - 1);
-    // Also need to update if it's removed
-    $scope.updateGPA();
   };
 
   // Get Semester
@@ -167,6 +164,9 @@ app.controller("calcCtrl", function($scope, $filter){
     $scope.updateGPA();
     if($scope.gpatype != 3){
         $scope.semesters[currentSemester].classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    }
+    else{
+      $scope.semesters[currentSemester].classes = [{credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}];
     }
   };
 
