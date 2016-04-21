@@ -1,8 +1,9 @@
-# AngularGPA
-GPA Calculator using Angular JS.
-This will calculate your GPA in real time.
+# GPA For Me (GPA Calculator)
+GPA Calculator created using AngularJS.  
+This calculator will calculate your GPA in real time.  
+You can change the GPA scale, add semesters and classes, save all data, and have both semester and cumulative GPA readily available.
 
-Check it out live [here](http://gpafor.me)
+###Check it out live [here](http://gpafor.me)
 
 ## To Do List
 ~~Allow it to save inputs using cookies or local storage.~~  
