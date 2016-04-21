@@ -100,6 +100,7 @@ app.controller("calcCtrl", function($scope, $filter){
       classes: []
     }
     $scope.semesters.push($scope.inserted);
+    $scope.getSemester(semesterCount - 1);
   };
 
   // Remove Semester
@@ -111,9 +112,9 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     semesterCount--;
     $scope.semesters.splice(semesterCount, 1);
+    $scope.getSemester(semesterCount - 1);
     // Also need to update if it's removed
     $scope.updateGPA();
-
   };
 
   // Get Semester
@@ -266,7 +267,7 @@ app.controller("calcCtrl", function($scope, $filter){
 
           if($scope.gpatype == 3){
             if($scope.semesters[i].classes[j].level == 2){ // Honors has + .5 GPA
-              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 :$scope.semesters[i].classes[j].grade + 0.5)); //make sure it's not 0
+              cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 : $scope.semesters[i].classes[j].grade + 0.5)); //make sure it's not 0
             }
             else if($scope.semesters[i].classes[j].level == 3){ //AP has + 1.0 GPA
               cumulativequality += ($scope.semesters[i].classes[j].credit * ($scope.semesters[i].classes[j].grade == 0 ? 0 : $scope.semesters[i].classes[j].grade + 1.0));

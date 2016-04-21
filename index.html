@@ -90,13 +90,12 @@
 					<h4>My Semesters</h4>
 					<table class="table">
 						<tr ng-repeat="semester in semesters">
-							<td class="{{semester.selected}}"><a ng-click="getSemester($index)">{{semester.name}}</a></td>
+							<td class="{{semester.selected}}"><a class="semester" ng-click="getSemester($index)">{{semester.name}}</a></td>
 						</tr>
 					</table>
-					<button class="btn btn-default btn-small" ng-click="addSemester()">+</button><button class="btn btn-small btn-danger" ng-click="removeSemester()">-</button>
+					<button class="btn btn-default btn-small" ng-click="addSemester()">+</button><button class="btn btn-small btn-danger" ng-show="semesters.length > 1" ng-click="removeSemester()">-</button>
 				</div>
 			</div>
-
 
 			<!--Table for GPA Values-->
 			<div class="col-md-2 col-xs-12">
