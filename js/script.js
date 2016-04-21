@@ -100,6 +100,7 @@ app.controller("calcCtrl", function($scope, $filter){
       classes: []
     }
     $scope.semesters.push($scope.inserted);
+    //Switch to new semester
     $scope.getSemester(semesterCount - 1);
   };
 
@@ -112,6 +113,7 @@ app.controller("calcCtrl", function($scope, $filter){
     }
     semesterCount--;
     $scope.semesters.splice(semesterCount, 1);
+    // Switch to previous semester
     $scope.getSemester(semesterCount - 1);
     // Also need to update if it's removed
     $scope.updateGPA();
