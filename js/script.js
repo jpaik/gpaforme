@@ -99,8 +99,15 @@ app.controller("calcCtrl", function($scope, $filter){
       classes: []
     }
     $scope.semesters.push($scope.inserted);
-    //Switch to new semester
+    // Switch to new semester
     $scope.getSemester(semesterCount - 1);
+    // Add Default classes to new semester
+    if($scope.gpatype != 3){
+        $scope.semesters[currentSemester].classes = [{credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}, {credit: '', grade: 4}];
+    }
+    else{
+      $scope.semesters[currentSemester].classes = [{credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}, {credit: '', grade: 4, level : 1}];
+    }
   };
 
   // Remove Semester
