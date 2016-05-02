@@ -10,6 +10,7 @@ You can change the GPA scale, add semesters and classes, save all data, and have
 ~~Add more GPA Models like Highschool AP classes.~~  
 ~~Add semesters into calculations.~~  
 Ability to rename semesters and maybe reorder them?  
+Show credit count next to semesters.  
 Allow users to input custom GPA scale.  
 Add Login and Sign up to keep track of GPA progress.  
 Connect to Database, maybe firebase?  
