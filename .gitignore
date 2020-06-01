@@ -1,0 +1,10 @@
+node_modules
+dist
+.env
+.nuxt
+.serverless
+npm-debug.log
+sw.js
+
+# logs
+logs/
