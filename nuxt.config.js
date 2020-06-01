@@ -4,7 +4,7 @@ const site_title = "GPA For Me";
 const site_description =
   "Real time GPA Calculator. Calculate your semester and cumulative grade point average easily with this calculator.";
 const site_keywords =
-  "GPA Calculator, Cumulative GPA, Cumulative GPA Calculator, Real Time GPA, HS GPA Calculator, College GPA Calculator, GPA for me, gpaforme";
+  "GPA Calculator, Cumulative GPA, Cumulative GPA Calculator, Real Time GPA, HS GPA Calculator, College GPA Calculator, GPA for me, gpaforme, Calculate your GPA, GPA";
 const site_url = "https://gpafor.me";
 
 export default {
