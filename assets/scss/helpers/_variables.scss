@@ -1,0 +1,80 @@
+@charset "utf-8";
+/*Import Fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Raleway:wght@300;400;500&display=swap');
+
+// Bootstrap Overrides (these get rendered into :root by bootstrap)
+$font-family-sans-serif: 'Open Sans',
+sans-serif,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+"Helvetica Neue",
+Arial,
+"Noto Sans",
+sans-serif,
+"Apple Color Emoji",
+"Segoe UI Emoji",
+"Segoe UI Symbol",
+"Noto Color Emoji" !default;
+$headings-font-family: 'Raleway',
+sans-serif,
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+Roboto,
+"Helvetica Neue",
+Arial,
+"Noto Sans",
+sans-serif,
+"Apple Color Emoji",
+"Segoe UI Emoji",
+"Segoe UI Symbol",
+"Noto Color Emoji" !default;
+$font-weight-base: 300;
+$headings-font-weight: 300;
+
+$body-color: #333333;
+
+// Miscellaneous
+$variable-columns: false !default; // recommended
+
+$blue: #00ACDC; // Light Blue
+$secondary: #04396c; // Ocean Blue
+$green: #93C01F; //#57A03C; // Credifi Light Green
+$indigo: #031f4b; // Dark Blue
+$light-gray: #cccccc;
+
+$purple: #6f42c1 !default;
+$pink: #d63384 !default;
+$red: #dc3545 !default;
+$orange: #fd7e14 !default;
+$yellow: #ffc107 !default;
+$teal: #20c997 !default;
+$cyan: #17a2b8 !default;
+
+$primary: $blue !default;
+$success: #57A03C; //$green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: #f8f9fa;
+$dark: #343a40 !default;
+
+$theme-colors: ("primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark, "darkblue": $indigo);
+$grid-breakpoints: (xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px);
+
+$container-max-widths: (sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1610px);
+
+// Custom Variables
+$navbar-height: 70px;
+$background-color: #EFEFEF;
