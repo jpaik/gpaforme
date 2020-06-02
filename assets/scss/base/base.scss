@@ -15,7 +15,6 @@ html * {
 }
 
 html {
-  height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -24,7 +23,6 @@ html {
 body {
   padding: 0;
   margin: 0;
-  height: 100%;
   width: 100%;
   background: $background-color;
 
@@ -41,7 +39,8 @@ body {
 }
 
 .content {
-  padding-top: $navbar-height;
+  margin-top: $navbar-height + 20px;
+  padding: 1em;
 }
 
 input,
@@ -67,5 +66,13 @@ button,
       -webkit-box-shadow: none;
       box-shadow: none;
     }
+  }
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  img {
+    max-height: 45px;
+    margin-right: .125em;
   }
 }

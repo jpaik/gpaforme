@@ -1,17 +1,24 @@
 <template>
   <b-navbar toggleable="lg" type="light" variant="light" fixed="top">
-    <a class="navbar-brand" href="/">GPA For Me</a>
+    <a class="navbar-brand" href="/">
+      <img src="/logo.svg" class="img-fluid d-inline-block align-top" />
+      GPA For Me
+    </a>
 
     <b-navbar-toggle target="main-menu"></b-navbar-toggle>
     <b-collapse id="main-menu" is-nav>
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="ml-auto align-items-center">
         <template v-if="isAuthenticated">
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>
-              <strong>{{ loggedInUser.username }}</strong>
-            </template>
-            <b-dropdown-item to="/settings">Settings</b-dropdown-item>
-          </b-nav-item-dropdown>
+          <b-nav-item>
+            <b-button variant="outline-dark font-weight-light w-100">{{
+              loggedInUser.name
+            }}</b-button>
+          </b-nav-item>
+          <b-nav-item @click="logout">
+            <b-button variant="outline-dark font-weight-light w-100"
+              >Logout</b-button
+            >
+          </b-nav-item>
         </template>
         <template v-else>
           <b-nav-item @click="login">
@@ -37,6 +44,9 @@ export default {
   methods: {
     login() {
       this.$auth.loginWith("auth0");
+    },
+    logout() {
+      this.$auth.logout();
     },
   },
 };

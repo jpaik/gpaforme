@@ -1,11 +1,15 @@
 <template>
-  <footer class="footer">
+  <footer class="footer my-5">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-7">
-          <p>
-            &copy; <a href="//cosinic.com">Cosinic</a> {{ year }}.
-            <a href="//github.com/jpaik/gpaforme"
+          <p class="text-center small">
+            &copy; <a href="//cosinic.com" class="text-dark">Cosinic</a>
+            {{ year }}.
+            <a
+              href="//github.com/jpaik/gpaforme"
+              target="blank"
+              class="text-dark"
               >View source code on Github.</a
             >
           </p>
