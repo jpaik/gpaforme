@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const site_title = "GPA For Me";
+const site_title = "GPA Calculator For Me";
 const site_description =
   "Real time GPA Calculator. Calculate your semester and cumulative grade point average easily with this calculator.";
 const site_keywords =
