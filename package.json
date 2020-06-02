@@ -11,7 +11,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore ."
+    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore .",
+    "setup-db": "node ./helpers/setup-db.js"
   },
   "dependencies": {
     "@nuxtjs/auth-next": "^5.0.0-1590092757.1671dba",
@@ -21,6 +22,7 @@
     "@nuxtjs/sitemap": "^2.3.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.1",
+    "faunadb": "^2.14.1",
     "nuxt": "^2.8.0",
     "webfontloader": "^1.6.28"
   },
