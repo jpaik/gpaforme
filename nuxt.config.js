@@ -188,6 +188,10 @@ export default {
     {
       src: "~/plugins/webFontLoader.client.js",
     },
+    {
+      src: "~/plugins/localStorage.js",
+      ssr: false,
+    },
   ],
 
   /*

@@ -24,6 +24,7 @@
     "bootstrap-vue": "^2.0.1",
     "faunadb": "^2.14.1",
     "nuxt": "^2.8.0",
+    "vuex-persistedstate": "^3.0.1",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
