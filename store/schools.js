@@ -1,4 +1,4 @@
-import { createSchool, getSchools } from "~/models/School";
+import { createSchool, getSchools } from "~/models/Schools";
 //   deleteSchool,
 //   updateSchoolName,
 //   updateSchoolGPAType,
