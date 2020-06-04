@@ -1,6 +1,6 @@
 import { q, client } from "../helpers/db";
 
-export function addClass(classData, semesterID) {
+export function addClass(semesterID, classData) {
   const me = q.Identity();
 
   return client

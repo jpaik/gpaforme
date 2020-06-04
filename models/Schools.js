@@ -1,6 +1,6 @@
 import { q, client } from "../helpers/db";
 
-export function createSchool(schoolData) {
+export function addSchool(schoolData) {
   const me = q.Identity();
 
   return client

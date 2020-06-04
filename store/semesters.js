@@ -1,4 +1,5 @@
-import { createSemester, getSemesters } from "~/models/Semesters";
+import { addSemester, getSemesters } from "~/models/Semesters";
+import LSModel from "~/models/LSModel";
 
 export const state = () => ({
   semesters: [],
@@ -17,15 +18,32 @@ export const mutations = {
   },
 };
 export const actions = {
-  getSemestersForSchool({ commit }, schoolID) {
-    getSemesters(schoolID).then((semesters) => {
-      commit("setSemesters", semesters);
-    });
+  getSemestersForSchool({ commit, getters }, schoolID) {
+    if (getters["isAuthenticated"]) {
+      getSemesters(schoolID).then((semesters) => {
+        commit("setSemesters", semesters);
+      });
+    } else {
+      // Do localStorage
+      commit("setSchools", LSModel.getLocalSemesters(schoolID));
+    }
   },
-  createSemester({ commit }, data) {
-    createSemester(data).then((resp) => {
-      commit("addSemester", resp);
-    });
+  /**
+   *
+   * @param {*} data expects schoolID and semesterData
+   */
+  createSemester({ commit, getters }, data) {
+    if (getters["isAuthenticated"]) {
+      addSemester(data.schoolID, data.semesterData).then((resp) => {
+        commit("addSemester", resp);
+      });
+    } else {
+      // Do localStorage
+      commit(
+        "addSemester",
+        LSModel.addLocalSemester(data.schoolID, data.semesterData)
+      );
+    }
   },
 };
 

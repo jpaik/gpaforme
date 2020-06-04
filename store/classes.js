@@ -1,8 +1,7 @@
-import { createClass, getClasses } from "~/models/Classes";
+import { addClass, getClasses } from "~/models/Classes";
+import LSModel from "~/models/LSModel";
 
-export const state = () => ({
-  classes: [],
-});
+export const state = () => ({ classes: [] });
 export const getters = {
   getClasses(state) {
     return state.classes;
@@ -17,21 +16,31 @@ export const mutations = {
   },
 };
 export const actions = {
-  getClassesForSemester({ commit }, semesterID) {
-    getClasses(semesterID).then((classes) => {
-      commit("setClasses", classes);
-    });
+  getClassesForSemester({ commit, getters }, semesterID) {
+    if (getters["isAuthenticated"]) {
+      getClasses(semesterID).then((classes) => {
+        commit("setClasses", classes);
+      });
+    } else {
+      // Do localStorage
+      commit("setClasses", LSModel.getLocalClasses(semesterID));
+    }
   },
-  createClass({ commit }, data) {
-    createClass(data).then((resp) => {
-      commit("addClass", resp);
-    });
+  /**
+   *
+   * @param {*} data expects semesterID and classData
+   */
+  createClass({ commit, getters }, data) {
+    if (getters["isAuthenticated"]) {
+      addClass(data.semesterID, data.classData).then((resp) => {
+        commit("addClass", resp);
+      });
+    } else {
+      commit(
+        "addClass",
+        LSModel.addLocalClass(data.semesterID, data.classData)
+      );
+    }
   },
 };
-
-export default {
-  state,
-  actions,
-  mutations,
-  getters,
-};
+export default { state, actions, mutations, getters };
