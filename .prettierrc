@@ -1,7 +1,16 @@
 {
   "tabWidth": 2,
   "useTabs": false,
+  "trailingComma": "es5",
   "semi": true,
+  "singleQuote": false,
   "jsxBracketSameLine": false,
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "parser": "babel",
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": { "parser": "vue" }
+    }
+  ]
 }
