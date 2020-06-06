@@ -50,6 +50,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  props: ["school"],
   data() {
     return {
       editing: [],
@@ -57,9 +58,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      semesters: "semesters/getSemesters",
       activeSemester: "semesters/getActiveSemester" || 0,
     }),
+    semesters() {
+      return this.school
+        ? this.$store.getters["semesters/getSemestersForSchool"](this.school.id)
+        : [];
+    },
   },
   methods: {
     isEditing(id) {

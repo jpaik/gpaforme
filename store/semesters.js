@@ -6,6 +6,8 @@ export const state = () => ({
 });
 export const getters = {
   getSemesters: (state) => state.semesters,
+  getSemestersForSchool: (state) => (schoolId) =>
+    state.semesters.filter((s) => s.school === schoolId),
   getSemesterById: (state) => (id) => state.semesters.find((s) => s.id === id),
   getActiveSemester: (state) => state.semesters.find((s) => s.active),
 };
