@@ -39,17 +39,17 @@ $body-color: #333333;
 // Miscellaneous
 $variable-columns: false !default; // recommended
 
-$blue: #00ACDC; // Light Blue
-$secondary: #04396c; // Ocean Blue
-$green: #93C01F; //#57A03C; // Credifi Light Green
-$indigo: #031f4b; // Dark Blue
+$blue: #1982c4; 
+$secondary: #04396c;
+$green: #009B72;
+$indigo: #2E294E;
 $light-gray: #cccccc;
 
 $purple: #6f42c1 !default;
 $pink: #d63384 !default;
-$red: #dc3545 !default;
-$orange: #fd7e14 !default;
-$yellow: #ffc107 !default;
+$red: #D7263D !default;
+$orange: #F46036 !default;
+$yellow: #ffca3a !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
@@ -61,7 +61,7 @@ $danger: $red !default;
 $light: #f8f9fa;
 $dark: #343a40 !default;
 
-$theme-colors: ("primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark, "darkblue": $indigo);
+$theme-colors: ("primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark);
 $grid-breakpoints: (xs: 0,
   sm: 576px,
   md: 768px,

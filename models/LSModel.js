@@ -78,7 +78,7 @@ class LSModel {
         .sort((a, b) => a.id - b.id)
         .pop().id || 0;
     const newSchool = {
-      id: latestId + 1,
+      id: isNaN(latestId) ? 0 : parseInt(latestId) + 1,
       ...data,
     };
     this.schools.push(newSchool);

@@ -1,10 +1,88 @@
 import createPersistedState from "vuex-persistedstate";
 
-function getAuthenticatedUserData(store, key) {
+function getAuthenticatedUserData(store) {
   store.dispatch("schools/getAllSchools");
   store.dispatch("semesters/getAllSemesters");
   store.dispatch("classes/getAllClasses");
-  return JSON.parse(localStorage.getItem(key));
+  return null;
+}
+
+function createDefaultSchool() {
+  const defaultSchool = {
+    id: "default",
+    name: "school",
+    scale: "plus",
+    active: true,
+  };
+  return [defaultSchool];
+}
+
+function createDefaultClasses() {
+  const defaultClass = {
+    id: 0,
+    credits: null,
+    grade: 4,
+    name: "",
+    comments: "",
+    semester: 0,
+  };
+  return [0, 1, 2, 3, 4].map((id) => {
+    return { ...defaultClass, id: id };
+  });
+}
+function createDefaultSemesters() {
+  const defaultSemester = {
+    id: 0,
+    name: "",
+    school: "default",
+    active: false,
+  };
+  return [0, 1].map((id) => {
+    return { ...defaultSemester, id: id, active: id === 0 };
+  });
+}
+
+/**
+ * Creates default classes if they don't exist if schema is Local Storage.
+ */
+function checkOrCreateDefaultClasses(key) {
+  const currentStore = JSON.parse(localStorage.getItem(key));
+  if (!currentStore) {
+    return {
+      schools: {
+        schools: createDefaultSchool(),
+      },
+      semesters: {
+        semesters: createDefaultSemesters(),
+      },
+      classes: {
+        classes: createDefaultClasses(),
+      },
+    };
+  }
+  if (
+    currentStore.classes &&
+    (!currentStore.classes.classes || !currentStore.classes.classes.length)
+  ) {
+    const classes = createDefaultClasses(); // Returns array of classes
+    currentStore.classes.classes = classes;
+  }
+  if (
+    currentStore.semesters &&
+    (!currentStore.semesters.semesters ||
+      !currentStore.semesters.semesters.length)
+  ) {
+    const semesters = createDefaultSemesters(); // Returns array of semesters
+    currentStore.semesters.semesters = semesters;
+  }
+  if (
+    currentStore.schools.schools &&
+    (!currentStore.schools.schools || !currentStore.schools.schools.length)
+  ) {
+    const school = createDefaultSchool(); // Returns array of one school object
+    currentStore.schools.schools = school;
+  }
+  return currentStore;
 }
 
 export default ({ store }) => {
@@ -15,7 +93,7 @@ export default ({ store }) => {
       getState: (key) =>
         store.state.auth.loggedIn
           ? getAuthenticatedUserData(store, key)
-          : JSON.parse(localStorage.getItem(key)),
+          : checkOrCreateDefaultClasses(key),
     })(store);
   });
 };

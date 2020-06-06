@@ -1,19 +1,15 @@
 import { addSchool, getSchools } from "~/models/Schools";
 import LSModel from "~/models/LSModel";
 export const state = () => ({
-  schools: [
-    {
-      id: "default",
-      name: "school",
-      scale: "plus",
-      active: true,
-    },
-  ],
+  schools: [],
 });
 
 export const getters = {
   getSchools(state) {
     return state.schools;
+  },
+  getActiveSchool(state) {
+    return state.schools.find((s) => s.active);
   },
 };
 
@@ -56,10 +52,23 @@ export const actions = {
     }
   },
   updateSchoolScale({ commit, getters }, scale) {
-    const currentSchool = getters["getSchools"].find((s) => s.active);
+    const currentSchool = getters["getActiveSchool"];
     const newData = {
       ...currentSchool,
       scale: scale,
+    };
+    if (getters["isAuthenticated"]) {
+      // Change
+    } else {
+      // Do localStorage
+      commit("updateSchool", LSModel.updateLocalSchool(newData.id, newData));
+    }
+  },
+  updateSchoolName({ commit, getters }, name) {
+    const currentSchool = getters["getActiveSchool"];
+    const newData = {
+      ...currentSchool,
+      name: name,
     };
     if (getters["isAuthenticated"]) {
       // Change

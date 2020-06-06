@@ -6,7 +6,7 @@
           <span>Semester GPA:</span>
         </h2>
         <div class="table-responsive">
-          <table class="table table-hover table-bordered table-light">
+          <table class="table table-hover table-bordered">
             <thead>
               <tr class="text-center">
                 <th>Name</th>
@@ -17,21 +17,24 @@
             </thead>
             <tbody>
               <tr v-for="cls in classes" :key="cls.id">
-                <td>
+                <td class="text-center">
                   <input :value="cls.name" class="text" />
                 </td>
-                <td>
+                <td class="text-center">
                   <input :value="cls.credits" class="text" />
                 </td>
-                <td>
+                <td class="text-center">
                   <select :value="cls.grade">
                     <option
                       v-for="option in gpaScale"
-                      :key="option"
+                      :key="cls.id + '_' + option.text"
                       :value="option.value"
                       >{{ option.text }}</option
                     >
                   </select>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-danger">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -41,6 +44,7 @@
 
       <div class="col-12 col-md-2 order-md-1">
         <h4 class="text-center">Semesters</h4>
+        <Semesters />
       </div>
 
       <div class="col-12 col-md-2 order-md-3">
@@ -51,7 +55,7 @@
               v-for="option in getGPATypes"
               :key="option.value"
               :value="option.value"
-              :selected="schools[0].scale === option.value"
+              :selected="currentScale === option.value"
               >{{ option.text }}</option
             >
           </select>
@@ -87,7 +91,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Semesters from "~/components/Semesters";
 export default {
+  components: {
+    Semesters,
+  },
   data() {
     return {};
   },
@@ -101,11 +109,11 @@ export default {
     ...mapGetters({
       gpas: "getGPAS",
       schools: "schools/getSchools",
-      semesters: "semesters/getSemesters",
       classes: "classes/getClasses",
+      activeSchool: "schools/getActiveSchool",
     }),
     currentScale() {
-      return this.schools[0].scale;
+      return this.activeSchool ? this.activeSchool.scale : false;
     },
     gpaScale() {
       return this.gpas[this.currentScale];
