@@ -1,5 +1,4 @@
 import { addClass, getClasses } from "~/models/Classes";
-import LSModel from "~/models/LSModel";
 
 export const state = () => ({ classes: [] });
 export const getters = {
@@ -25,46 +24,44 @@ export const mutations = {
   },
 };
 export const actions = {
-  getClassesForSemester({ commit, getters }, semesterId) {
+  pullClassesForSemester({ commit, getters }, semesterId) {
     if (getters["isAuthenticated"]) {
       getClasses(semesterId).then((classes) => {
         commit("setClasses", classes);
       });
-    } else {
-      // Do localStorage
-      commit("setClasses", LSModel.getLocalClasses(semesterId));
     }
   },
   /**
    *
-   * @param {*} data expects semesterId and classData
+   * @param {*} data expects semester and rest of data
    */
   createClass({ commit, getters }, data) {
     if (getters["isAuthenticated"]) {
-      addClass(data.semesterId, data.classData).then((resp) => {
+      addClass(data.semester, data).then((resp) => {
         commit("addClass", resp);
       });
     } else {
-      commit(
-        "addClass",
-        LSModel.addLocalClass(data.semesterId, data.classData)
-      );
+      const latestClassId = [...getters["getClassesForSemester"](data.semester)]
+        .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+        .pop().id || [0];
+      const newClass = {
+        ...data,
+        id: data.semester + "_" + (latestClassId.split("_").pop() + 1),
+      };
+      commit("addClass", newClass);
     }
   },
-  updateClassName({ commit, getters }, { classId, newName }) {
-    const toUpdate = getters["getClassById"](classId);
+  updateClassValue({ commit, getters }, data) {
+    const toUpdate = getters["getClassById"](data.id);
     const toUpdateData = {
       ...toUpdate,
-      name: newName,
+      ...data,
     };
     if (getters["isAuthenticated"]) {
       // Change
     } else {
       // Do localStorage
-      commit(
-        "updateClass",
-        LSModel.updateLocalClass(toUpdate.id, toUpdateData)
-      );
+      commit("updateClass", toUpdateData);
     }
   },
 };

@@ -2,7 +2,10 @@
   <div>
     <h4 class="text-center">GPA Model</h4>
     <div class="text-center pb-3">
-      <select @change="changeGPAType($event)">
+      <select
+        class="form-control w-auto d-inline-block"
+        @change="changeGPAType($event)"
+      >
         <option
           v-for="option in getGPATypes"
           :key="option.value"

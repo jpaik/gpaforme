@@ -50,18 +50,21 @@ function createDefaultSemesters() {
 /**
  * Creates default classes if they don't exist if schema is Local Storage.
  */
-function checkOrCreateDefaultClasses(key) {
+function checkOrCreateDefaultClasses(store, key) {
   const currentStore = JSON.parse(localStorage.getItem(key));
+  const defaultSchools = createDefaultSchool();
+  const defaultSemesters = createDefaultSemesters();
+  const defaultClasses = createDefaultClasses();
   if (!currentStore) {
     return {
       schools: {
-        schools: createDefaultSchool(),
+        schools: defaultSchools,
       },
       semesters: {
-        semesters: createDefaultSemesters(),
+        semesters: defaultSemesters,
       },
       classes: {
-        classes: createDefaultClasses(),
+        classes: defaultClasses,
       },
     };
   }
@@ -69,23 +72,20 @@ function checkOrCreateDefaultClasses(key) {
     currentStore.classes &&
     (!currentStore.classes.classes || !currentStore.classes.classes.length)
   ) {
-    const classes = createDefaultClasses(); // Returns array of classes
-    currentStore.classes.classes = classes;
+    currentStore.classes.classes = defaultClasses;
   }
   if (
     currentStore.semesters &&
     (!currentStore.semesters.semesters ||
       !currentStore.semesters.semesters.length)
   ) {
-    const semesters = createDefaultSemesters(); // Returns array of semesters
-    currentStore.semesters.semesters = semesters;
+    currentStore.semesters.semesters = defaultSemesters;
   }
   if (
     currentStore.schools.schools &&
     (!currentStore.schools.schools || !currentStore.schools.schools.length)
   ) {
-    const school = createDefaultSchool(); // Returns array of one school object
-    currentStore.schools.schools = school;
+    currentStore.schools.schools = defaultSchools;
   }
   return currentStore;
 }
@@ -98,7 +98,7 @@ export default ({ store }) => {
       getState: (key) =>
         store.state.auth.loggedIn
           ? getAuthenticatedUserData(store, key)
-          : checkOrCreateDefaultClasses(key),
+          : checkOrCreateDefaultClasses(store, key),
     })(store);
   });
 };

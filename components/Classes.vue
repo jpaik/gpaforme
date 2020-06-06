@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="table-responsive">
-      <table class="table table-hover table-bordered">
+      <table class="table table-bordered">
         <thead>
           <tr class="text-center">
             <th>Name</th>
             <th>Credits</th>
             <th>Grade</th>
-            <th>Actions</th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
@@ -15,26 +15,45 @@
             <td class="text-center">
               <input
                 :value="cls.name"
-                class="text"
-                @blur="renameClass($event, cls.id)"
+                class="form-control"
+                type="text"
+                name="name"
+                @blur="editClass($event, cls.id)"
                 @keyup.enter="$event.target.blur()"
               />
             </td>
             <td class="text-center">
-              <input :value="cls.credits" class="text" />
+              <input
+                :value="cls.credits"
+                class="form-control"
+                type="number"
+                name="credits"
+                @blur="editClass($event, cls.id)"
+                @keyup.enter="$event.target.blur()"
+              />
             </td>
             <td class="text-center">
-              <select :value="cls.grade">
+              <select
+                :value="cls.grade"
+                name="grade"
+                :class="{
+                  'form-control w-auto d-inline-block': true,
+                }"
+                @change="editClass($event, cls.id)"
+              >
                 <option
                   v-for="option in gpaScale"
                   :key="cls.id + '_' + option.text"
                   :value="option.value"
+                  :selected="parseFloat(option.value) === parseFloat(cls.grade)"
                   >{{ option.text }}</option
                 >
               </select>
             </td>
             <td class="text-center">
-              <button class="btn btn-danger">Delete</button>
+              <button class="btn btn-danger">
+                <i class="far fa-trash" aria-label="Delete"></i>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -70,12 +89,14 @@ export default {
     },
   },
   methods: {
-    renameClass(event, classId) {
-      const newName = event.target.value;
-      this.$store.dispatch("classes/updateClassName", {
-        classId,
-        newName,
-      });
+    editClass(event, classId) {
+      const newValue = event.target.value;
+      const changed = event.target.name;
+      const updatePackage = {
+        id: classId,
+      };
+      updatePackage[changed] = newValue;
+      this.$store.dispatch("classes/updateClassValue", updatePackage);
     },
   },
 };

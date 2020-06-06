@@ -1,5 +1,4 @@
 import { addSchool, getSchools } from "~/models/Schools";
-import LSModel from "~/models/LSModel";
 export const state = () => ({
   schools: [],
 });
@@ -36,9 +35,6 @@ export const actions = {
       getSchools.then((schools) => {
         commit("setSchools", schools);
       });
-    } else {
-      // Do localStorage
-      commit("setSchools", LSModel.getLocalSchools());
     }
   },
   createSchool({ commit, getters }, data) {
@@ -47,8 +43,14 @@ export const actions = {
         commit("addSchool", resp);
       });
     } else {
-      // Do localStorage
-      commit("addSchool", LSModel.addLocalSchool(data));
+      // Do localStoragenewSemester
+      const latestSchoolId =
+        [...getters["getSchools"]].sort((a, b) => a.id - b.id).pop().id || 0;
+      const newSemester = {
+        ...data,
+        id: isNaN(latestSchoolId) ? 0 : parseInt(latestSchoolId) + 1,
+      };
+      commit("addSchool", newSemester);
     }
   },
   updateSchoolScale({ commit, getters }, scale) {
@@ -61,7 +63,7 @@ export const actions = {
       // Change
     } else {
       // Do localStorage
-      commit("updateSchool", LSModel.updateLocalSchool(newData.id, newData));
+      commit("updateSchool", newData);
     }
   },
   updateSchoolName({ commit, getters }, name) {
@@ -74,7 +76,7 @@ export const actions = {
       // Change
     } else {
       // Do localStorage
-      commit("updateSchool", LSModel.updateLocalSchool(newData.id, newData));
+      commit("updateSchool", newData);
     }
   },
 };

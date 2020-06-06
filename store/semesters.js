@@ -1,5 +1,4 @@
 import { addSemester, getSemesters } from "~/models/Semesters";
-import LSModel from "~/models/LSModel";
 
 export const state = () => ({
   semesters: [],
@@ -33,26 +32,29 @@ export const actions = {
       getSemesters(schoolId).then((semesters) => {
         commit("setSemesters", semesters);
       });
-    } else {
-      // Do localStorage
-      commit("setSemesters", LSModel.getLocalSemesters(schoolId));
     }
   },
   /**
    *
-   * @param {*} data expects schoolId and semesterData
+   * @param {*} data expects school and rest of data
    */
   createSemester({ commit, getters }, data) {
     if (getters["isAuthenticated"]) {
-      addSemester(data.schoolId, data.semesterData).then((resp) => {
+      addSemester(data.school, data).then((resp) => {
         commit("addSemester", resp);
       });
     } else {
       // Do localStorage
-      commit(
-        "addSemester",
-        LSModel.addLocalSemester(data.schoolId, data.semesterData)
-      );
+      const latestSemesterId = [
+        ...getters["getSemestersForSchool"](data.school),
+      ]
+        .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+        .pop().id || [0];
+      const newSemester = {
+        ...data,
+        id: data.school + "_" + (latestSemesterId.split("_").pop() + 1),
+      };
+      commit("addSemester", newSemester);
     }
   },
   updateActiveSemester({ commit, getters }, semesterId) {
@@ -71,15 +73,9 @@ export const actions = {
     } else {
       // Do localStorage
       if (currentSemester) {
-        commit(
-          "updateSemester",
-          LSModel.updateLocalSemester(currentSemester.id, changeCurrentActive)
-        );
+        commit("updateSemester", changeCurrentActive);
       }
-      commit(
-        "updateSemester",
-        LSModel.updateLocalSemester(newActive.id, changeNewActive)
-      );
+      commit("updateSemester", changeNewActive);
     }
   },
   updateSemesterName({ commit, getters }, { semesterId, newName }) {
@@ -92,10 +88,7 @@ export const actions = {
       // Change
     } else {
       // Do localStorage
-      commit(
-        "updateSemester",
-        LSModel.updateLocalSemester(toUpdate.id, toUpdateData)
-      );
+      commit("updateSemester", toUpdateData);
     }
   },
 };

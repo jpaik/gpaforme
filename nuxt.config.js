@@ -8,7 +8,7 @@ const site_keywords =
 const site_url = "https://gpafor.me";
 
 export default {
-  mode: "universal",
+  mode: "spa",
   /*
    ** Headers of the page
    */

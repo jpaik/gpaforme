@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="text-center">Semesters</h4>
+    <h4 class="text-center mb-4">Semesters</h4>
     <div class="list-group">
       <a
         v-for="sem in semesters"
@@ -41,9 +41,11 @@
         </button>
       </a>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-2">
       <div class="col-12 text-center">
-        <button class="btn btn-outline-dark">Add Semester</button>
+        <button class="btn btn-outline-dark">
+          <i class="far fa-plus"></i> Add Semester
+        </button>
       </div>
     </div>
   </div>
