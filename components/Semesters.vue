@@ -1,5 +1,6 @@
 <template>
-  <div class="">
+  <div>
+    <h4 class="text-center">Semesters</h4>
     <div class="list-group">
       <a
         v-for="sem in semesters"
@@ -19,7 +20,7 @@
           v-show="!isEditing(sem.id)"
           @click.stop="toggleEditing(this, sem.id)"
         >
-          {{ sem.name ? sem.name : "Semester " + (sem.id + 1) }}
+          {{ sem.name ? sem.name : "Semester " + getSemesterLegibleId(sem.id) }}
         </span>
         <input
           v-show="isEditing(sem.id)"
@@ -50,7 +51,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["school"],
+  props: ["activeSchool"],
   data() {
     return {
       editing: [],
@@ -61,12 +62,19 @@ export default {
       activeSemester: "semesters/getActiveSemester" || 0,
     }),
     semesters() {
-      return this.school
-        ? this.$store.getters["semesters/getSemestersForSchool"](this.school.id)
+      return this.activeSchool
+        ? this.$store.getters["semesters/getSemestersForSchool"](
+            this.activeSchool.id
+          )
         : [];
     },
   },
   methods: {
+    getSemesterLegibleId(id) {
+      if (id) {
+        return parseInt(id.split("_").pop()) + 1;
+      }
+    },
     isEditing(id) {
       return this.editing.indexOf(id) > -1;
     },
