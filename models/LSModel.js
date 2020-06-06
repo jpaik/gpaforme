@@ -7,7 +7,7 @@
  *    {
  *        id: int,
  *        name: string,
- *        gpa_type: int
+ *        scale: int
  *    },
  *    ...
  * ]
