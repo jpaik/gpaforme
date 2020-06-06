@@ -44,46 +44,11 @@
 
       <div class="col-12 col-md-2 order-md-1">
         <h4 class="text-center">Semesters</h4>
-        <Semesters />
+        <Semesters :school="activeSchool" />
       </div>
 
       <div class="col-12 col-md-2 order-md-3">
-        <h4 class="text-center">GPA Model</h4>
-        <div class="text-center pb-3">
-          <select @change="changeGPAType($event)">
-            <option
-              v-for="option in getGPATypes"
-              :key="option.value"
-              :value="option.value"
-              :selected="currentScale === option.value"
-              >{{ option.text }}</option
-            >
-          </select>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered table-sm">
-            <thead>
-              <tr class="text-center">
-                <th>Grade</th>
-                <th>{{ currentScale === "hs" ? "Acd." : "Points" }}</th>
-                <th v-if="currentScale === 'hs'">Hnr.</th>
-                <th v-if="currentScale === 'hs'">A.P.</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-              <tr v-for="gpa in gpaScale" :key="gpa.text">
-                <td>{{ gpa.text }}</td>
-                <td>{{ gpa.value }}</td>
-                <td v-if="currentScale === 'hs'">
-                  {{ gpa.value ? gpa.value + 0.5 : 0 }}
-                </td>
-                <td v-if="currentScale === 'hs'">
-                  {{ gpa.value ? gpa.value + 1.0 : 0 }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <GPAScale />
       </div>
     </div>
   </div>
@@ -92,9 +57,11 @@
 <script>
 import { mapGetters } from "vuex";
 import Semesters from "~/components/Semesters";
+import GPAScale from "~/components/GPA";
 export default {
   components: {
     Semesters,
+    GPAScale,
   },
   data() {
     return {};
@@ -123,10 +90,6 @@ export default {
     this.$nextTick(() => {});
   },
   methods: {
-    changeGPAType(event) {
-      const newScale = event.target.value;
-      this.$store.dispatch("schools/updateSchoolScale", newScale);
-    },
     toDecimal(val) {
       if (val && typeof val === "number") {
         if (Number.isInteger(val)) {
