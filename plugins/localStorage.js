@@ -24,11 +24,16 @@ function createDefaultClasses() {
     grade: 4,
     name: "",
     comments: "",
-    semester: 0,
+    semester: "default_0",
   };
-  return [0, 1, 2, 3, 4].map((id) => {
-    return { ...defaultClass, id: id };
-  });
+  return [
+    ...[0, 1, 2, 3, 4].map((id) => {
+      return { ...defaultClass, id: "default_0_" + id };
+    }),
+    ...[0, 1, 2, 3, 4].map((id) => {
+      return { ...defaultClass, id: "default_1_" + id, semester: "default_1" };
+    }),
+  ];
 }
 function createDefaultSemesters() {
   const defaultSemester = {
@@ -38,7 +43,7 @@ function createDefaultSemesters() {
     active: false,
   };
   return [0, 1].map((id) => {
-    return { ...defaultSemester, id: id, active: id === 0 };
+    return { ...defaultSemester, id: "default_" + id, active: id === 0 };
   });
 }
 

@@ -116,12 +116,11 @@ class LSModel {
     }
   }
   addLocalSemester(schoolId, data) {
-    const latestId =
-      this.getLocalSemesters(schoolId)
-        .sort((a, b) => a.id - b.id)
-        .pop().id || 0;
+    const latestId = this.getLocalSemesters(schoolId)
+      .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+      .pop().id || [0];
     const newSemester = {
-      id: latestId + 1,
+      id: schoolId + "_" + (latestId.split("_").pop() + 1),
       ...data,
     };
     this.semesters.push(newSemester);
@@ -158,12 +157,11 @@ class LSModel {
     }
   }
   addLocalClass(semesterId, data) {
-    const latestClassId =
-      this.getLocalClasses(semesterId)
-        .sort((a, b) => a.id - b.id)
-        .pop().id || 0;
+    const latestClassId = this.getLocalClasses(semesterId)
+      .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+      .pop().id || [0];
     const newClass = {
-      id: latestClassId + 1,
+      id: semesterId + "_" + (latestClassId.split("_").pop() + 1),
       ...data,
     };
     this.classes.push(newClass);
