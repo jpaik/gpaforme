@@ -1,4 +1,4 @@
-import { addClass, getClasses } from "~/models/Classes";
+import { addClass, getClasses, deleteClass } from "~/models/Classes";
 
 export const state = () => ({ classes: [] });
 export const getters = {
@@ -22,6 +22,12 @@ export const mutations = {
       ...newData,
     });
   },
+  deleteClass(state, id) {
+    if (state.classes.length > 1) {
+      const idx = state.classes.findIndex((c) => id === c.id);
+      state.classes.splice(idx, 1);
+    }
+  },
 };
 export const actions = {
   pullClassesForSemester({ commit, getters }, semesterId) {
@@ -35,20 +41,46 @@ export const actions = {
    *
    * @param {*} data expects semester and rest of data
    */
-  createClass({ commit, getters }, data) {
+  createClass({ commit, getters, rootGetters }, semesterId) {
+    const activeSemesterId =
+      semesterId || rootGetters["semesters/getActiveSemester"].id;
+    const classData = {
+      credits: null,
+      grade: 4,
+      name: "",
+      comments: "",
+      semester: activeSemesterId,
+    };
     if (getters["isAuthenticated"]) {
-      addClass(data.semester, data).then((resp) => {
+      addClass(activeSemesterId, classData).then((resp) => {
         commit("addClass", resp);
       });
     } else {
-      const latestClassId = [...getters["getClassesForSemester"](data.semester)]
-        .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
-        .pop().id || [0];
+      let latestClasses = [
+        ...getters["getClassesForSemester"](activeSemesterId),
+      ];
+      let latestClassId = 0;
+      if (latestClasses.length) {
+        latestClassId = latestClasses
+          .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+          .pop().id || [0];
+        latestClassId = parseInt(latestClassId.split("_").pop());
+      }
       const newClass = {
-        ...data,
-        id: data.semester + "_" + (latestClassId.split("_").pop() + 1),
+        ...classData,
+        id: activeSemesterId + "_" + (latestClassId + 1),
       };
       commit("addClass", newClass);
+    }
+  },
+  deleteClass({ commit, getters }, classId) {
+    if (getters["isAuthenticated"]) {
+      deleteClass(classId).then((resp) => {
+        commit("deleteClass", resp);
+      });
+    } else {
+      // Do localStorage
+      commit("deleteClass", classId);
     }
   },
   updateClassValue({ commit, getters }, data) {
@@ -62,6 +94,15 @@ export const actions = {
     } else {
       // Do localStorage
       commit("updateClass", toUpdateData);
+    }
+  },
+  deleteClassesForSemester({ commit, getters }, semesterId) {
+    if (getters["isAuthenticated"]) {
+      // Change
+    } else {
+      // Do localStorage
+      const classes = getters["getClassesForSemester"](semesterId);
+      classes.forEach((c) => commit("deleteClass", c.id));
     }
   },
 };

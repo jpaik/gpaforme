@@ -51,13 +51,28 @@
               </select>
             </td>
             <td class="text-center">
-              <button class="btn btn-danger">
+              <button
+                class="btn btn-danger"
+                type="button"
+                @click.stop.prevent="deleteClass(cls.id)"
+              >
                 <i class="far fa-trash" aria-label="Delete"></i>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-3">
+        <button
+          class="btn btn-outline-success w-100"
+          type="button"
+          @click.stop.prevent="addClass()"
+        >
+          Add Class
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +112,12 @@ export default {
       };
       updatePackage[changed] = newValue;
       this.$store.dispatch("classes/updateClassValue", updatePackage);
+    },
+    addClass() {
+      this.$store.dispatch("classes/createClass");
+    },
+    deleteClass(classId) {
+      this.$store.dispatch("classes/deleteClass", classId);
     },
   },
 };
