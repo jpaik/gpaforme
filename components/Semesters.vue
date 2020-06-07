@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="text-center mb-4">Semesters</h4>
+    <h4 class="text-center mt-4">Semesters</h4>
     <div class="list-group">
       <a
         v-for="sem in semesters"
@@ -33,6 +33,7 @@
           @keyup.enter="$event.target.blur()"
         />
         <button
+          v-if="semesters.length"
           type="button"
           class="btn btn-danger btn-sm ml-auto"
           @click.stop.prevent="deleteSemester(sem.id)"
@@ -43,7 +44,11 @@
     </div>
     <div class="row mt-2">
       <div class="col-12 text-center">
-        <button class="btn btn-outline-dark">
+        <button
+          class="btn btn-outline-dark"
+          type="button"
+          @click.stop.prevent="addSemester()"
+        >
           <i class="far fa-plus"></i> Add Semester
         </button>
       </div>
@@ -61,7 +66,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      activeSemester: "semesters/getActiveSemester" || 0,
+      activeSemester: "semesters/getActiveSemester",
     }),
     semesters() {
       return this.activeSchool
@@ -94,8 +99,11 @@ export default {
     changeActiveSemester(semesterId) {
       this.$store.dispatch("semesters/updateActiveSemester", semesterId);
     },
+    addSemester() {
+      this.$store.dispatch("semesters/createSemester");
+    },
     deleteSemester(semesterId) {
-      console.log(semesterId);
+      this.$store.dispatch("semesters/deleteSemester", semesterId);
     },
     renameSemester(event, semesterId) {
       const newName = event.target.value;

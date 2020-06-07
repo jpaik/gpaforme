@@ -1,4 +1,4 @@
-import { addSemester, getSemesters } from "~/models/Semesters";
+import { addSemester, getSemesters, deleteSemester } from "~/models/Semesters";
 
 export const state = () => ({
   semesters: [],
@@ -8,7 +8,17 @@ export const getters = {
   getSemestersForSchool: (state) => (schoolId) =>
     state.semesters.filter((s) => s.school === schoolId),
   getSemesterById: (state) => (id) => state.semesters.find((s) => s.id === id),
-  getActiveSemester: (state) => state.semesters.find((s) => s.active),
+  getActiveSemester: (state, getters, rootState, rootGetters) => {
+    const active = state.semesters.find((s) => s.active);
+    if (active) {
+      return active;
+    } else {
+      const activeSchool = rootGetters["schools/getActiveSchool"];
+      if (activeSchool) {
+        return getters["getSemestersForSchool"](activeSchool.id)[0];
+      }
+    }
+  },
 };
 export const mutations = {
   addSemester(state, newSemester) {
@@ -25,6 +35,12 @@ export const mutations = {
       ...newData,
     });
   },
+  deleteSemester(state, id) {
+    if (state.semesters.length > 1) {
+      const idx = state.semesters.findIndex((s) => id === s.id);
+      state.semesters.splice(idx, 1);
+    }
+  },
 };
 export const actions = {
   getSemestersForSchool({ commit, getters }, schoolId) {
@@ -38,23 +54,47 @@ export const actions = {
    *
    * @param {*} data expects school and rest of data
    */
-  createSemester({ commit, getters }, data) {
+  createSemester({ commit, getters, rootGetters, dispatch }, schoolId) {
+    const activeSchoolId =
+      schoolId || rootGetters["schools/getActiveSchool"].id;
+    const semesterData = {
+      name: "",
+      school: activeSchoolId,
+      active: false,
+    };
     if (getters["isAuthenticated"]) {
-      addSemester(data.school, data).then((resp) => {
+      addSemester(activeSchoolId, semesterData).then((resp) => {
         commit("addSemester", resp);
       });
     } else {
       // Do localStorage
-      const latestSemesterId = [
-        ...getters["getSemestersForSchool"](data.school),
-      ]
-        .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
-        .pop().id || [0];
+      let latestSemesters = [
+        ...getters["getSemestersForSchool"](activeSchoolId),
+      ];
+      let latestSemesterId = 0;
+      if (latestSemesters.length) {
+        latestSemesterId = latestSemesters
+          .sort((a, b) => a.id.split("_").pop() - b.id.split("_").pop())
+          .pop().id || [0];
+        latestSemesterId = parseInt(latestSemesterId.split("_").pop());
+      }
       const newSemester = {
-        ...data,
-        id: data.school + "_" + (latestSemesterId.split("_").pop() + 1),
+        ...semesterData,
+        id: activeSchoolId + "_" + (latestSemesterId + 1),
       };
       commit("addSemester", newSemester);
+      dispatch("classes/createClass", newSemester.id, { root: true });
+    }
+  },
+  deleteSemester({ commit, getters, dispatch }, semesterId) {
+    if (getters["isAuthenticated"]) {
+      deleteSemester(semesterId).then((resp) => {
+        commit("deleteSemester", resp);
+      });
+    } else {
+      // Do localStorage
+      commit("deleteSemester", semesterId);
+      dispatch("classes/deleteClassesForSemester", semesterId, { root: true });
     }
   },
   updateActiveSemester({ commit, getters }, semesterId) {
