@@ -7,6 +7,7 @@
             <th>Name</th>
             <th>Credits</th>
             <th>Grade</th>
+            <th v-if="currentScale === 'hs'">Level</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -46,6 +47,24 @@
                   :key="cls.id + '_' + option.text"
                   :value="option.value"
                   :selected="parseFloat(option.value) === parseFloat(cls.grade)"
+                  >{{ option.text }}</option
+                >
+              </select>
+            </td>
+            <td v-if="currentScale === 'hs'" class="text-center">
+              <select
+                :value="cls.level"
+                name="level"
+                :class="{
+                  'form-control w-auto d-inline-block': true,
+                }"
+                @change="editClass($event, cls.id)"
+              >
+                <option
+                  v-for="option in getGPALevels"
+                  :key="cls.id + '_' + option.value"
+                  :value="option.value"
+                  :selected="parseInt(option.value) === parseInt(cls.level)"
                   >{{ option.text }}</option
                 >
               </select>
@@ -122,3 +141,23 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+td {
+  > input[name="credits"] {
+    display: inline-block;
+    max-width: 3rem;
+    text-align: center;
+  }
+
+  // Disables browser up/down arrows
+  input[type="number"] {
+    -moz-appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+  }
+}
+</style>
