@@ -79,6 +79,42 @@ export const getters = {
   getGPALevels(state) {
     return state.GPA_LEVELS;
   },
+  getSemesterGPA(state, getters, rootState, rootGetters) {
+    const activeSemester = rootGetters["semesters/getActiveSemester"];
+    const classes = rootGetters["classes/getClassesForSemester"](
+      activeSemester.id
+    );
+    let totalCredits = 0;
+    let earnedGrades = 0;
+    classes.forEach((c) => {
+      if (c.credits && c.grade && !isNaN(c.credits) && !isNaN(c.grade)) {
+        totalCredits += parseFloat(c.credits);
+        earnedGrades += parseFloat(c.grade) * parseFloat(c.credits);
+      }
+    }, 0);
+    return totalCredits ? (earnedGrades / totalCredits).toFixed(1) : "N/A";
+  },
+  getCumulativeGPA(state, getters, rootState, rootGetters) {
+    const activeSchool = rootGetters["schools/getActiveSchool"];
+    const semesters = rootGetters["semesters/getSemestersForSchool"](
+      activeSchool.id
+    );
+    if (semesters.length < 2) {
+      return false;
+    }
+    const classes = rootGetters["classes/getClasses"];
+    let totalCredits = 0;
+    let earnedGrades = 0;
+    classes
+      .filter((c) => semesters.some((s) => s.id === c.semester))
+      .forEach((c) => {
+        if (c.credits && c.grade && !isNaN(c.credits) && !isNaN(c.grade)) {
+          totalCredits += parseFloat(c.credits);
+          earnedGrades += parseFloat(c.grade) * parseFloat(c.credits);
+        }
+      }, 0);
+    return (earnedGrades / totalCredits).toFixed(1);
+  },
 };
 export const mutations = {};
 export const actions = {};
