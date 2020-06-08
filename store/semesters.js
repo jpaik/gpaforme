@@ -19,6 +19,16 @@ export const getters = {
       }
     }
   },
+  getCreditsForSemester: (state, getters, rootState, rootGetters) => (id) => {
+    const classes = rootGetters["classes/getClassesForSemester"](id);
+    if (classes) {
+      return classes.reduce(
+        (sum, c) => (c.credits ? parseInt(c.credits) + sum : sum),
+        0
+      );
+    }
+    return 0;
+  },
 };
 export const mutations = {
   addSemester(state, newSemester) {

@@ -33,8 +33,8 @@ FaunaDB will be the serverless database used to store data.
 - ~~Allow it to save inputs using cookies or local storage.~~  
 - ~~Add more GPA Models like Highschool AP classes.~~  
 - ~~Add semesters into calculations.~~  
-- Ability to rename semesters and maybe reorder them?  
-- Show credit count next to semesters.  
+- ~~Ability to rename semesters~~
+- ~~Show credit count next to semesters.~~  
 - Allow users to input custom GPA scale.  
 - Add Login and Sign up to keep track of GPA progress.  
 - Connect to Database 

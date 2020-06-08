@@ -18,6 +18,7 @@
       >
         <span
           v-show="!isEditing(sem.id)"
+          class="mr-auto semester_name_edit"
           @click.stop="toggleEditing(this, sem.id)"
         >
           {{ sem.name ? sem.name : "Semester " + getSemesterLegibleId(sem.id) }}
@@ -32,10 +33,18 @@
           @blur="renameSemester($event, sem.id)"
           @keyup.enter="$event.target.blur()"
         />
+        <span
+          v-show="!isEditing(sem.id)"
+          v-if="getSemesterCredits(sem.id)"
+          title="Total Credits"
+          class="small mr-2"
+        >
+          ({{ getSemesterCredits(sem.id) }} cr.)
+        </span>
         <button
           v-if="semesters.length"
           type="button"
-          class="btn btn-danger btn-sm ml-auto"
+          class="btn btn-danger btn-sm"
           @click.stop.prevent="deleteSemester(sem.id)"
         >
           <i class="far fa-trash"></i>
@@ -82,6 +91,9 @@ export default {
         return parseInt(id.split("_").pop()) + 1;
       }
     },
+    getSemesterCredits(id) {
+      return this.$store.getters["semesters/getCreditsForSemester"](id);
+    },
     isEditing(id) {
       return this.editing.indexOf(id) > -1;
     },
@@ -116,3 +128,11 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.semester_name_edit {
+  &:hover {
+    cursor: text;
+  }
+}
+</style>
