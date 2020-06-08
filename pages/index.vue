@@ -25,19 +25,19 @@
             <b-alert
               :show="dataSaved"
               :variant="getSavingClass"
-              class="d-flex align-items-center"
+              class="d-flex align-items-center justify-content-center"
             >
               <b-spinner
                 v-if="dataSaved === 1"
                 type="grow"
                 label="Saving..."
                 small
-                class="mr-3"
+                class="mr-2"
               ></b-spinner>
-              <span v-else class="mr-3">
+              <span v-else class="mr-2">
                 <i class="far fa-check"></i>
               </span>
-              {{ getSavingText() }}
+              <span class="mr-3">{{ getSavingText() }}</span>
             </b-alert>
           </div>
         </div>

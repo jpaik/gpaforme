@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-xl-7">
           <p class="text-center font-weight-normal">
             Save and access your GPA anywhere by
             <a href="#" @click.prevent="login()"
@@ -10,7 +10,7 @@
             >.<br />Otherwise, your data will be saved in your local storage.
           </p>
         </div>
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-xl-7">
           <p class="text-center small">
             &copy; <a href="//cosinic.com" class="text-dark">Cosinic</a>
             {{ year }}.

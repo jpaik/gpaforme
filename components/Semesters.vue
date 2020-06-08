@@ -18,7 +18,7 @@
       >
         <span
           v-show="!isEditing(sem.id)"
-          class="mr-auto semester_name_edit"
+          class="mr-auto semester_name_edit font-weight-normal"
           @click.stop="toggleEditing(this, sem.id)"
         >
           {{ sem.name ? sem.name : "Semester " + getSemesterLegibleId(sem.id) }}

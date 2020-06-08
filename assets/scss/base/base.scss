@@ -41,6 +41,7 @@ body {
 .content {
   margin-top: $navbar-height + 20px;
   padding: 1em;
+  margin-bottom: 4em;
   @media only screen and (max-width: 991px) {
     margin-top: $navbar-height;
   }
@@ -92,12 +93,18 @@ button,
   }
 }
 
+.form-control {
+  font-weight: 400;
+}
+
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
+  background: $background-color;
+  padding-top: 1em;
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 1201px) {
     position: relative;
   }
 }

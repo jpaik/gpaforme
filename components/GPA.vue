@@ -16,7 +16,7 @@
       </select>
     </div>
     <div class="table-responsive">
-      <table class="table table-hover table-bordered table-sm">
+      <table class="table table-hover table-bordered table-sm bg-white">
         <thead>
           <tr class="text-center">
             <th>Grade</th>
