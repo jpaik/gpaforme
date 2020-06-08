@@ -83,7 +83,7 @@
       </table>
     </div>
     <div class="row justify-content-center">
-      <div class="col-3">
+      <div class="col-12 col-sm-6 col-lg-3">
         <button
           class="btn btn-outline-success w-100"
           type="button"
@@ -143,13 +143,33 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@media only screen and (max-width: 991px) {
+  table.table {
+    font-size: 0.8rem;
+    th,
+    td {
+      padding: 0.5rem;
+      button {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.45rem;
+      }
+    }
+  }
+  .form-control {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
 td {
   > input[name="credits"] {
     display: inline-block;
     max-width: 3rem;
     text-align: center;
   }
-
+  > input[name="name"] {
+    display: inline-block;
+    min-width: 6rem;
+  }
   // Disables browser up/down arrows
   input[type="number"] {
     -moz-appearance: textfield;

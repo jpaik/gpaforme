@@ -41,6 +41,9 @@ body {
 .content {
   margin-top: $navbar-height + 20px;
   padding: 1em;
+  @media only screen and (max-width: 991px) {
+    margin-top: $navbar-height;
+  }
 }
 
 input,
@@ -71,9 +74,21 @@ button,
 
 .navbar-brand {
   font-size: 2rem;
+
+  @media only screen and (max-width: 991px) {
+  font-size: 1.75rem;
+  }
   img {
     max-height: 45px;
     margin-right: .125em;
+  }
+}
+
+.table-bordered {
+  thead {
+    th,td {
+      border-bottom-width: 1px;
+    }
   }
 }
 

@@ -14,14 +14,14 @@
               loggedInUser.name
             }}</b-button>
           </b-nav-item>
-          <b-nav-item @click="logout">
+          <b-nav-item class="w-100" @click="logout">
             <b-button variant="outline-dark font-weight-light w-100"
               >Logout</b-button
             >
           </b-nav-item>
         </template>
         <template v-else>
-          <b-nav-item @click="login">
+          <b-nav-item class="w-100" @click="login">
             <b-button variant="outline-primary font-weight-light w-100"
               >Login</b-button
             >
