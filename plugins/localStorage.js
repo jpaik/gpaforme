@@ -1,4 +1,5 @@
 import createPersistedState from "vuex-persistedstate";
+import { checkOldLocalStorage, convertOldToNew } from "./lsMigration";
 
 function getAuthenticatedUserData(store) {
   store.dispatch("schools/getAllSchools");
@@ -92,6 +93,13 @@ function checkOrCreateDefaultClasses(store, key) {
 
 export default ({ store }) => {
   window.onNuxtReady(() => {
+    const ls = localStorage || window.localStorage;
+    // If localStorage key gpaforme hasn't been defined yet, check for migration
+    if (!ls.getItem("gpaforme") || ls.getItem("gpaforme") === null) {
+      if (checkOldLocalStorage()) {
+        convertOldToNew();
+      }
+    }
     createPersistedState({
       key: "gpaforme",
       paths: ["schools.schools", "semesters.semesters", "classes.classes"],
