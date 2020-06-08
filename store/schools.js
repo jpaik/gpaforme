@@ -14,7 +14,7 @@ export const getters = {
 
 export const mutations = {
   addSchool(state, school) {
-    state.school.push(school);
+    state.schools.push(school);
   },
   setSchools(state, schools) {
     state.schools = schools;
