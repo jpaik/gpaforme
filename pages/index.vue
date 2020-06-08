@@ -19,33 +19,31 @@
           </div>
         </div>
         <Classes :active-school="activeSchool" />
-      </div>
 
+        <div class="row justify-content-center mt-4">
+          <div class="col-6 col-sm-4 col-lg-2">
+            <b-alert
+              :show="dataSaved"
+              :variant="getSavingClass"
+              class="d-flex align-items-center"
+            >
+              <b-spinner
+                v-if="dataSaved === 1"
+                type="grow"
+                label="Saving..."
+                small
+                class="mr-3"
+              ></b-spinner>
+              <span v-else class="mr-3">
+                <i class="far fa-check"></i>
+              </span>
+              {{ getSavingText() }}
+            </b-alert>
+          </div>
+        </div>
+      </div>
       <div class="col-12 order-3 col-sm-6 col-xl-2 mb-4">
         <GPAScale />
-      </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="col-6 col-sm-4 col-lg-2">
-        <b-alert
-          :show="dismissCountDown"
-          :variant="getSavingClass"
-          class="d-flex align-items-center"
-          @dismissed="dismissCountDown = 0"
-          @dismiss-count-down="countDownChanged"
-        >
-          <b-spinner
-            v-if="dismissCountDown > 1"
-            type="grow"
-            label="Saving..."
-            small
-            class="mr-3"
-          ></b-spinner>
-          <span v-if="dismissCountDown <= 1" class="mr-3">
-            <i class="far fa-check"></i>
-          </span>
-          {{ getSavingText() }}
-        </b-alert>
       </div>
     </div>
   </div>
@@ -63,10 +61,7 @@ export default {
     Classes,
   },
   data() {
-    return {
-      dismissSecs: 2,
-      dismissCountDown: 0,
-    };
+    return {};
   },
   computed: {
     ...mapGetters([
@@ -81,25 +76,15 @@ export default {
       dataSaved: "getSavingState",
     }),
     getSavingClass() {
-      return this.dismissCountDown > 1 ? "warning" : "success";
-    },
-  },
-  watch: {
-    dataSaved: function (val) {
-      if (val) {
-        this.dismissCountDown = this.dismissSecs;
-      }
+      return this.dataSaved === 1 ? "warning" : "success";
     },
   },
   mounted() {
     this.$nextTick(() => {});
   },
   methods: {
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
-    },
     getSavingText() {
-      return this.dismissCountDown > 1 ? "Saving..." : "Saved";
+      return this.dataSaved === 1 ? "Saving..." : "Saved";
     },
   },
 };

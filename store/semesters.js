@@ -94,6 +94,7 @@ export const actions = {
       };
       commit("addSemester", newSemester);
       dispatch("classes/createClass", newSemester.id, { root: true });
+      dispatch("triggerSaving", null, { root: true });
     }
   },
   deleteSemester({ commit, getters, dispatch }, semesterId) {
@@ -105,6 +106,7 @@ export const actions = {
       // Do localStorage
       commit("deleteSemester", semesterId);
       dispatch("classes/deleteClassesForSemester", semesterId, { root: true });
+      dispatch("triggerSaving", null, { root: true });
     }
   },
   updateActiveSemester({ commit, getters }, semesterId) {
@@ -128,7 +130,7 @@ export const actions = {
       commit("updateSemester", changeNewActive);
     }
   },
-  updateSemesterName({ commit, getters }, { semesterId, newName }) {
+  updateSemesterName({ commit, getters, dispatch }, { semesterId, newName }) {
     const toUpdate = getters["getSemesterById"](semesterId);
     const toUpdateData = {
       ...toUpdate,
@@ -139,6 +141,7 @@ export const actions = {
     } else {
       // Do localStorage
       commit("updateSemester", toUpdateData);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
 };

@@ -91,6 +91,30 @@ function checkOrCreateDefaultClasses(store, key) {
   return currentStore;
 }
 
+const requestIdleCallback =
+  window.requestIdleCallback ||
+  ((cb) => {
+    let start = Date.now();
+    return setTimeout(() => {
+      let data = {
+        didTimeout: false,
+        timeRemaining() {
+          return Math.max(0, 50 - (Date.now() - start));
+        },
+      };
+      cb(data);
+    }, 1);
+  });
+
+function saveToLocalStorage(key, state) {
+  const ls = localStorage || window.localStorage;
+  requestIdleCallback(() => {
+    if (ls) {
+      ls.setItem(key, JSON.stringify(state));
+    }
+  });
+}
+
 export default ({ store }) => {
   window.onNuxtReady(() => {
     const ls = localStorage || window.localStorage;
@@ -107,6 +131,7 @@ export default ({ store }) => {
         store.state.auth.loggedIn
           ? getAuthenticatedUserData(store, key)
           : checkOrCreateDefaultClasses(store, key),
+      setState: (key, state) => saveToLocalStorage(key, state),
     })(store);
   });
 };

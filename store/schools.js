@@ -37,7 +37,7 @@ export const actions = {
       });
     }
   },
-  createSchool({ commit, getters }, data) {
+  createSchool({ commit, getters, dispatch }, data) {
     if (getters["isAuthenticated"]) {
       addSchool(data).then((resp) => {
         commit("addSchool", resp);
@@ -51,9 +51,10 @@ export const actions = {
         id: isNaN(latestSchoolId) ? 0 : parseInt(latestSchoolId) + 1,
       };
       commit("addSchool", newSemester);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateSchoolScale({ commit, getters }, scale) {
+  updateSchoolScale({ commit, getters, dispatch }, scale) {
     const currentSchool = getters["getActiveSchool"];
     const newData = {
       ...currentSchool,
@@ -64,9 +65,10 @@ export const actions = {
     } else {
       // Do localStorage
       commit("updateSchool", newData);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateSchoolName({ commit, getters }, name) {
+  updateSchoolName({ commit, getters, dispatch }, name) {
     const currentSchool = getters["getActiveSchool"];
     const newData = {
       ...currentSchool,
@@ -77,6 +79,7 @@ export const actions = {
     } else {
       // Do localStorage
       commit("updateSchool", newData);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
 };

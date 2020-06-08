@@ -41,7 +41,7 @@ export const actions = {
    *
    * @param {*} data expects semester and rest of data
    */
-  createClass({ commit, getters, rootGetters }, semesterId) {
+  createClass({ commit, getters, rootGetters, dispatch }, semesterId) {
     const activeSemesterId =
       semesterId || rootGetters["semesters/getActiveSemester"].id;
     const classData = {
@@ -71,9 +71,10 @@ export const actions = {
         id: activeSemesterId + "_" + (latestClassId + 1),
       };
       commit("addClass", newClass);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
-  deleteClass({ commit, getters }, classId) {
+  deleteClass({ commit, getters, dispatch }, classId) {
     if (getters["isAuthenticated"]) {
       deleteClass(classId).then((resp) => {
         commit("deleteClass", resp);
@@ -81,9 +82,10 @@ export const actions = {
     } else {
       // Do localStorage
       commit("deleteClass", classId);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateClassValue({ commit, getters }, data) {
+  updateClassValue({ commit, getters, dispatch }, data) {
     const toUpdate = getters["getClassById"](data.id);
     const toUpdateData = {
       ...toUpdate,
@@ -94,6 +96,7 @@ export const actions = {
     } else {
       // Do localStorage
       commit("updateClass", toUpdateData);
+      dispatch("triggerSaving", null, { root: true });
     }
   },
   deleteClassesForSemester({ commit, getters }, semesterId) {

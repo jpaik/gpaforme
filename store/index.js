@@ -69,6 +69,7 @@ export const state = () => ({
   GPAS,
   GPA_TYPES,
   GPA_LEVELS,
+  saving_state: 0,
 });
 export const getters = {
   isAuthenticated(state) {
@@ -76,6 +77,9 @@ export const getters = {
   },
   loggedInUser(state) {
     return state.auth.user;
+  },
+  getSavingState(state) {
+    return state.saving_state;
   },
   faunaKey(state) {
     return state.auth.user
@@ -135,8 +139,23 @@ export const getters = {
     return (earnedGrades / totalCredits).toFixed(3);
   },
 };
-export const mutations = {};
-export const actions = {};
+export const mutations = {
+  changeSaving(state, val) {
+    state.saving_state = val;
+  },
+};
+export const actions = {
+  triggerSaving({ commit }) {
+    // 1 === loading, 2 === saved, 3 === hidden
+    commit("changeSaving", 1);
+    setTimeout(() => {
+      commit("changeSaving", 2);
+    }, Math.random() * 200 + 200);
+    setTimeout(() => {
+      commit("changeSaving", 0);
+    }, Math.random() * 200 + 900);
+  },
+};
 
 export default {
   state,
