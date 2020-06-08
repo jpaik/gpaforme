@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer my-5">
+  <footer class="footer">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-7">

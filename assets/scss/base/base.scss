@@ -76,3 +76,13 @@ button,
     margin-right: .125em;
   }
 }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  @media only screen and (max-width: 991px) {
+    position: relative;
+  }
+}
