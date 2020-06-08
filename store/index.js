@@ -53,6 +53,18 @@ const GPA_LEVELS = [
   { value: 3, text: "A.P." },
 ];
 
+const getHighschoolGrade = (grade, level) => {
+  if (grade === 0) return 0;
+  switch (parseInt(level)) {
+    case 2: // Honors
+      return grade + 0.5;
+    case 3: // A.P.
+      return grade + 1;
+    default:
+      return grade;
+  }
+};
+
 export const state = () => ({
   GPAS,
   GPA_TYPES,
@@ -80,6 +92,7 @@ export const getters = {
     return state.GPA_LEVELS;
   },
   getSemesterGPA(state, getters, rootState, rootGetters) {
+    const activeSchool = rootGetters["schools/getActiveSchool"];
     const activeSemester = rootGetters["semesters/getActiveSemester"];
     const classes = rootGetters["classes/getClassesForSemester"](
       activeSemester.id
@@ -89,10 +102,13 @@ export const getters = {
     classes.forEach((c) => {
       if (c.credits && c.grade && !isNaN(c.credits) && !isNaN(c.grade)) {
         totalCredits += parseFloat(c.credits);
-        earnedGrades += parseFloat(c.grade) * parseFloat(c.credits);
+        earnedGrades +=
+          (activeSchool.scale === "hs"
+            ? getHighschoolGrade(parseFloat(c.grade), c.level)
+            : parseFloat(c.grade)) * parseFloat(c.credits);
       }
     }, 0);
-    return totalCredits ? (earnedGrades / totalCredits).toFixed(1) : "N/A";
+    return totalCredits ? (earnedGrades / totalCredits).toFixed(3) : "N/A";
   },
   getCumulativeGPA(state, getters, rootState, rootGetters) {
     const activeSchool = rootGetters["schools/getActiveSchool"];
@@ -110,10 +126,13 @@ export const getters = {
       .forEach((c) => {
         if (c.credits && c.grade && !isNaN(c.credits) && !isNaN(c.grade)) {
           totalCredits += parseFloat(c.credits);
-          earnedGrades += parseFloat(c.grade) * parseFloat(c.credits);
+          earnedGrades +=
+            (activeSchool.scale === "hs"
+              ? getHighschoolGrade(parseFloat(c.grade), c.level)
+              : parseFloat(c.grade)) * parseFloat(c.credits);
         }
       }, 0);
-    return (earnedGrades / totalCredits).toFixed(1);
+    return (earnedGrades / totalCredits).toFixed(3);
   },
 };
 export const mutations = {};
