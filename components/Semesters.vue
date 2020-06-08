@@ -42,10 +42,10 @@
         </button>
       </a>
     </div>
-    <div class="row mt-2">
+    <div class="row mt-3">
       <div class="col-12 text-center">
         <button
-          class="btn btn-outline-dark"
+          class="btn btn-outline-dark btn-sm"
           type="button"
           @click.stop.prevent="addSemester()"
         >
