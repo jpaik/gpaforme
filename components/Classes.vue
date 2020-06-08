@@ -89,7 +89,7 @@
           type="button"
           @click.stop.prevent="addClass()"
         >
-          Add Class
+          <i class="far fa-plus"></i> Add Class
         </button>
       </div>
     </div>
