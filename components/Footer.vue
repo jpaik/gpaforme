@@ -2,7 +2,7 @@
   <footer class="footer">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-xl-7">
+        <div v-if="!$auth.loggedIn" class="col-12 col-xl-7">
           <p class="text-center font-weight-normal">
             Save and access your GPA anywhere by
             <a href="#" @click.prevent="login()"
