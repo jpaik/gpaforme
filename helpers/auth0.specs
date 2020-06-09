@@ -11,82 +11,75 @@
  */
 
 function createFaunaUser(user, context, callback) {
-    const faunadb = require("faunadb");
-    const q = faunadb.query;
-    const key = configuration.FAUNA_SECRET;
-    const client = new faunadb.Client({
-        secret: key
-    });
+  const faunadb = require("faunadb");
+  const q = faunadb.query;
+  const key = configuration.FAUNA_SECRET;
+  const client = new faunadb.Client({ secret: key });
 
-    if (!user.user_id) {
-        return callback(null, user, context);
-    }
+  if (!user.user_id) {
+    return callback(null, user, context);
+  }
 
-    client.query(
-            q.Get(q.Match(q.Index('users_by_id'), user.user_id))
-        )
-        .then(() => {
-            return callback(null, user, context);
-        })
-        .catch(e => {
-            if (e.requestResult.statusCode === 404) {
-                client.query(
-                        q.Create(q.Collection("users"), {
-                            data: {
-                                auth_id: user.user_id,
-                                user_metadata: user.user_metadata,
-                                authorized: true,
-                            }
-                        })
-                    )
-                    .then(() => {
-                        return callback(null, user, context);
-                    })
-                    .catch(e => {
-                        console.error(e);
-                        return callback(null, user, context);
-                    });
+  client.query(
+    q.Get(q.Match(q.Index('users_by_id'), user.user_id))
+  )
+    .then(() => {
+    	return callback(null, user, context);
+  	})
+    .catch(e => { 
+      if (e.requestResult.statusCode === 404) {
+        client.query(
+          q.Create(q.Collection("users"), {
+            credentials: { 
+              password: configuration.PASSWORD 
+            },
+            data: {
+              auth_id: user.user_id,
+              user_metadata: user.user_metadata,
+              authorized: true,
             }
-        });
+          })
+        )
+          .then(() => {
+            return callback(null, user, context);
+          })
+          .catch(e => { 
+          	console.error(e);
+            return callback(null, user, context);
+          });
+      }
+  	});
+
 }
 
 /**
  * Rule: Get FaunaDB Token
  */
 function getFaunaToken(user, context, callback) {
-    const faunadb = require("faunadb");
-    const q = faunadb.query;
-    const key = configuration.FAUNA_SECRET;
-    const client = new faunadb.Client({
-        secret: key
-    });
+  const faunadb = require("faunadb");
+  const q = faunadb.query;
+  const key = configuration.FAUNA_SECRET;
+  const client = new faunadb.Client({ secret: key });
 
-    if (!user.user_id) {
-        return callback(null, user, context);
-    }
-
-    const namespace = 'https://gpafor.me/';
-
-    client.query(
-        q.Get(q.Match(q.Index('users_by_id'), user.user_id))
-    ).then((getUser) => {
-        client.query(q.Create(q.Ref('tokens'), {
-                instance: getUser.ref
-            }))
-            .then((token) => {
-                // Success
-                user.fauna_token = token.secret;
-                context.idToken[namespace + 'fauna_token'] = token.secret;
-                return callback(null, user, context);
-            }).catch(e => {
-                console.log(e);
-                return callback(null, user, context);
-            });
-    }).catch(e => {
-        console.log(e);
-        return callback(null, user, context);
-    });
-
+  if (!user.user_id) {
+    return callback(null, user, context);
+  }
+  
+  const namespace = 'https://gpafor.me/';
+  
+  client.query(
+    q.Login(
+      q.Match(q.Index("users_by_id"), user.user_id),
+      { password: configuration.PASSWORD }
+      )
+  ).then((user) => {
+    user.fauna_token = user.secret;
+    context.idToken[namespace + 'fauna_token'] = user.secret;
+    return callback(null, user, context);
+  }).catch(e => { 
+    console.log(e); 
+    return callback(null, user, context);
+  });
 }
 
 /**
@@ -95,24 +88,25 @@ function getFaunaToken(user, context, callback) {
  */
 
 module.exports = function (user, context, cb) {
-    // Perform any asynchronous actions, e.g. send notification to Slack.
-    const faunadb = require("faunadb");
+  // Perform any asynchronous actions, e.g. send notification to Slack.
+  const faunadb = require("faunadb");
+  
+  const q = faunadb.query;
+  const key = context.webtask.secrets.FAUNA_SECRET;
+  const client = new faunadb.Client({ secret: key });
 
-    const q = faunadb.query;
-    const key = context.webtask.secrets.FAUNA_SECRET;
-    const client = new faunadb.Client({
-        secret: key
-    });
-
-    var createUser = client.query(
-        q.Create(q.Collection("users"), {
-            data: {
-                auth_id: user.id,
-                user_metadata: user.user_metadata,
-                authorized: true,
-            }
-        })
-    ).catch(e => console.error(e));
-
-    cb();
+  var createUser = client.query(
+    q.Create(q.Collection("users"), {
+      credentials: { 
+        password: context.webtask.secrets.PASSWORD 
+      },
+      data: {
+        auth_id: user.id,
+        user_metadata: user.user_metadata,
+        authorized: true,
+      }
+    })
+  ).catch(e => console.error(e));
+  
+ cb();
 };

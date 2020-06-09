@@ -3,6 +3,7 @@ This calculator will calculate your GPA in real time.
 You can change the GPA scale, add semesters and classes, save all data, and have both semester and cumulative GPA readily available.
 
 ### Check it out live [here](http://gpafor.me)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2c4eb1aa-51e6-4820-9871-378e9999c45f/deploy-status)](https://app.netlify.com/sites/gpaforme/deploys)
 
 ## Build Setup
 ``` bash
