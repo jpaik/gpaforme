@@ -5,8 +5,15 @@ export const state = () => ({
 });
 export const getters = {
   getSemesters: (state) => state.semesters,
-  getSemestersForSchool: (state) => (schoolId) =>
-    state.semesters.filter((s) => s.school === schoolId),
+  getSemestersForSchool: (state, getters, rootState, rootGetters) => (
+    schoolId
+  ) => {
+    if (rootGetters["isAuthenticated"]) {
+      return state.semesters.filter((s) => s.school.value.id === schoolId);
+    } else {
+      return state.semesters.filter((s) => s.school === schoolId);
+    }
+  },
   getSemesterById: (state) => (id) => state.semesters.find((s) => s.id === id),
   getActiveSemester: (state, getters, rootState, rootGetters) => {
     const active = state.semesters.find((s) => s.active);
@@ -51,11 +58,15 @@ export const mutations = {
       state.semesters.splice(idx, 1);
     }
   },
+  deleteAll(state) {
+    state.semesters = [];
+  },
 };
 export const actions = {
-  getSemestersForSchool({ commit, getters }, schoolId) {
-    if (getters["isAuthenticated"]) {
-      getSemesters(schoolId).then((semesters) => {
+  getSemestersForSchool({ commit, rootGetters }, schoolId) {
+    if (rootGetters["isAuthenticated"]) {
+      console.log("Get Semesters for School");
+      return getSemesters(this.$faunaClient(), schoolId).then((semesters) => {
         commit("setSemesters", semesters);
       });
     }
@@ -72,10 +83,12 @@ export const actions = {
       school: activeSchoolId,
       active: false,
     };
-    if (getters["isAuthenticated"]) {
-      addSemester(activeSchoolId, semesterData).then((resp) => {
-        commit("addSemester", resp);
-      });
+    if (rootGetters["isAuthenticated"]) {
+      addSemester(this.$faunaClient(), activeSchoolId, semesterData).then(
+        (resp) => {
+          commit("addSemester", resp);
+        }
+      );
     } else {
       // Do localStorage
       let latestSemesters = [
@@ -97,19 +110,21 @@ export const actions = {
       dispatch("triggerSaving", null, { root: true });
     }
   },
-  deleteSemester({ commit, getters, dispatch }, semesterId) {
-    if (getters["isAuthenticated"]) {
-      deleteSemester(semesterId).then((resp) => {
+  deleteSemester({ commit, rootGetters, dispatch }, semesterId) {
+    if (rootGetters["isAuthenticated"]) {
+      deleteSemester(this.$faunaClient(), semesterId).then((resp) => {
         commit("deleteSemester", resp);
       });
     } else {
       // Do localStorage
       commit("deleteSemester", semesterId);
-      dispatch("classes/deleteClassesForSemester", semesterId, { root: true });
+      dispatch("classes/deleteClassesForSemester", semesterId, {
+        root: true,
+      });
       dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateActiveSemester({ commit, getters }, semesterId) {
+  updateActiveSemester({ commit, getters, rootGetters }, semesterId) {
     const currentSemester = getters["getActiveSemester"];
     const changeCurrentActive = {
       ...currentSemester,
@@ -120,7 +135,7 @@ export const actions = {
       ...newActive,
       active: true,
     };
-    if (getters["isAuthenticated"]) {
+    if (rootGetters["isAuthenticated"]) {
       // Change
     } else {
       // Do localStorage
@@ -130,19 +145,25 @@ export const actions = {
       commit("updateSemester", changeNewActive);
     }
   },
-  updateSemesterName({ commit, getters, dispatch }, { semesterId, newName }) {
+  updateSemesterName(
+    { commit, getters, dispatch, rootGetters },
+    { semesterId, newName }
+  ) {
     const toUpdate = getters["getSemesterById"](semesterId);
     const toUpdateData = {
       ...toUpdate,
       name: newName,
     };
-    if (getters["isAuthenticated"]) {
+    if (rootGetters["isAuthenticated"]) {
       // Change
     } else {
       // Do localStorage
       commit("updateSemester", toUpdateData);
       dispatch("triggerSaving", null, { root: true });
     }
+  },
+  clearData({ commit }) {
+    return commit("deleteAll");
   },
 };
 

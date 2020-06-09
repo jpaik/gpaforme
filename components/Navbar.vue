@@ -9,11 +9,9 @@
     <b-collapse id="main-menu" is-nav>
       <b-navbar-nav class="ml-auto align-items-center">
         <template v-if="isAuthenticated">
-          <b-nav-item>
-            <b-button variant="outline-dark font-weight-light w-100">{{
-              loggedInUser.name
-            }}</b-button>
-          </b-nav-item>
+          <b-nav-text class="mx-3">
+            Welcome, {{ loggedInUser.name }}
+          </b-nav-text>
           <b-nav-item class="w-100" @click="logout">
             <b-button variant="outline-dark font-weight-light w-100"
               >Logout</b-button
@@ -46,7 +44,11 @@ export default {
       this.$auth.loginWith("auth0");
     },
     logout() {
-      this.$auth.logout();
+      this.$auth.logout().then(() => {
+        this.$store.dispatch("logout").then(() => {
+          window.location.reload(true);
+        });
+      });
     },
   },
 };

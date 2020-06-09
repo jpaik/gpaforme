@@ -1,14 +1,14 @@
-import { q, client } from "../helpers/db";
+import faunadb from "faunadb";
+const q = faunadb.query;
 
-export function addSemester(schoolID, semesterData) {
-  const me = q.Identity();
-
+export async function addSemester(client, schoolRef, semesterData) {
+  const me = await client.query(q.Identity());
   return client
     .query(
       q.Create(q.Collection("semesters"), {
         data: {
           ...semesterData,
-          school: q.Ref(q.Collections("schools"), schoolID),
+          school: schoolRef,
           owner: me,
         },
         permissions: {
@@ -17,11 +17,20 @@ export function addSemester(schoolID, semesterData) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((e) => e);
 }
 
-export function getSemesters(schoolID) {
+export function getSemesters(client, schoolID) {
   return client
     .query(q.Get(q.Ref(`collections/schools/${schoolID}`)))
     .then((school) => {
@@ -32,12 +41,24 @@ export function getSemesters(schoolID) {
             (ref) => q.Get(ref)
           )
         )
-        .then((resp) => resp);
+        .then((resp) => {
+          if (resp.data) {
+            const semesters = resp.data;
+            return semesters.map((s) => {
+              return {
+                ...s.data,
+                id: s.ref.value.id,
+                ref: s.ref,
+              };
+            });
+          }
+          return [];
+        });
     })
     .catch((err) => err);
 }
 
-export function deleteSemester(semester) {
+export function deleteSemester(client, semester) {
   return client
     .query(
       q.Map(
@@ -56,7 +77,7 @@ export function deleteSemester(semester) {
     .catch((err) => err);
 }
 
-export function updateSemesterName(semesterID, newName) {
+export function updateSemesterName(client, semesterID, newName) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("semesters"), semesterID), {
@@ -65,6 +86,15 @@ export function updateSemesterName(semesterID, newName) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((err) => err);
 }

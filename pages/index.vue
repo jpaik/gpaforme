@@ -6,7 +6,10 @@
       </div>
 
       <div class="col-12 order-sm-1 col-xl-8 order-xl-2 mb-4">
-        <div v-if="activeSchool" class="row justify-content-center mb-3">
+        <div
+          v-if="activeSchool && activeSemester"
+          class="row justify-content-center mb-3"
+        >
           <div class="col-6">
             <h2 class="text-center mobile-sm">
               <strong>Semester GPA: {{ getSemesterGPA }}</strong>
@@ -45,6 +48,17 @@
       <div class="col-12 order-3 col-sm-6 col-xl-2 mb-4">
         <GPAScale />
       </div>
+
+      <b-overlay :show="isMigrating" no-wrap>
+        <template v-slot:overlay>
+          <div class="d-flex flex-column align-items-center">
+            <b-spinner variant="primary" label="Migrating..."></b-spinner>
+            <h3 class="mt-3">Migrating local data to the cloud database.</h3>
+            <p>Please wait...</p>
+            <span class="sr-only">Please wait...</span>
+          </div>
+        </template>
+      </b-overlay>
     </div>
   </div>
 </template>
@@ -54,6 +68,7 @@ import { mapGetters } from "vuex";
 import Semesters from "~/components/Semesters";
 import Classes from "~/components/Classes";
 import GPAScale from "~/components/GPA";
+import { checkLocalStorage } from "~/plugins/faunaMigration";
 export default {
   components: {
     Semesters,
@@ -73,14 +88,25 @@ export default {
     ...mapGetters({
       schools: "schools/getSchools",
       activeSchool: "schools/getActiveSchool",
+      activeSemester: "semesters/getActiveSemester",
       dataSaved: "getSavingState",
+      isMigrating: "getMigratingState",
     }),
     getSavingClass() {
       return this.dataSaved === 1 ? "warning" : "success";
     },
   },
   mounted() {
-    this.$nextTick(() => {});
+    this.$nextTick(() => {
+      if (this.isAuthenticated) {
+        // If user is logged in and;
+        const hasSchool = this.schools.length;
+        // If school doesn't exist (then empty DB and localStorage exists, then migrate to Faunadb)
+        if (!hasSchool && checkLocalStorage()) {
+          this.$migrateToFauna();
+        }
+      }
+    });
   },
   methods: {
     getSavingText() {

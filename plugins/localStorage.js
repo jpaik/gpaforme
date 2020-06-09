@@ -1,11 +1,22 @@
 import createPersistedState from "vuex-persistedstate";
 import { checkOldLocalStorage, convertOldToNew } from "./lsMigration";
 
+const LS_KEY = "gpaforme";
+
 function getAuthenticatedUserData(store) {
-  store.dispatch("schools/getAllSchools");
-  store.dispatch("semesters/getAllSemesters");
-  store.dispatch("classes/getAllClasses");
-  return null;
+  store.dispatch("schools/getAllSchools").then(() => {
+    const activeSchool = store.getters["schools/getActiveSchool"];
+    if (activeSchool && activeSchool.id) {
+      store
+        .dispatch("semesters/getSemestersForSchool", activeSchool.id)
+        .then(() => {
+          const activeSemester = store.getters["semesters/getActiveSemester"];
+          console.log(activeSemester.id);
+          store.dispatch("classes/getClassesForSemester", activeSemester.id);
+        });
+    }
+  });
+  return false;
 }
 
 function createDefaultSchool() {
@@ -115,17 +126,28 @@ function saveToLocalStorage(key, state) {
   });
 }
 
+function localStorageEmpty() {
+  const ls = localStorage || window.localStorage;
+  if (ls.getItem(LS_KEY) !== null) {
+    const gpaforme = JSON.parse(ls.getItem(LS_KEY));
+    if (gpaforme.schools && gpaforme.schools.schools) {
+      return gpaforme.schools.schools.some((s) => s.id);
+    }
+    return true;
+  }
+  return true;
+}
+
 export default ({ store }) => {
   window.onNuxtReady(() => {
-    const ls = localStorage || window.localStorage;
     // If localStorage key gpaforme hasn't been defined yet, check for migration
-    if (!ls.getItem("gpaforme") || ls.getItem("gpaforme") === null) {
+    if (!localStorageEmpty()) {
       if (checkOldLocalStorage()) {
         convertOldToNew();
       }
     }
     createPersistedState({
-      key: "gpaforme",
+      key: LS_KEY,
       paths: ["schools.schools", "semesters.semesters", "classes.classes"],
       getState: (key) =>
         store.state.auth.loggedIn

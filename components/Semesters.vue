@@ -3,7 +3,7 @@
     <h4 class="text-center mt-xl-4">Semesters</h4>
     <div class="list-group">
       <a
-        v-for="sem in semesters"
+        v-for="(sem, semIdx) in semesters"
         :key="sem.id"
         href="#"
         role="group"
@@ -21,7 +21,11 @@
           class="mr-auto semester_name_edit font-weight-normal"
           @click.stop="toggleEditing(this, sem.id)"
         >
-          {{ sem.name ? sem.name : "Semester " + getSemesterLegibleId(sem.id) }}
+          {{
+            sem.name
+              ? sem.name
+              : "Semester " + getSemesterLegibleId(sem.id, semIdx)
+          }}
         </span>
         <input
           v-show="isEditing(sem.id)"
@@ -86,8 +90,11 @@ export default {
     },
   },
   methods: {
-    getSemesterLegibleId(id) {
+    getSemesterLegibleId(id, idx) {
       if (id) {
+        if (this.$store.getters["isAuthenticated"]) {
+          return idx;
+        }
         return parseInt(id.split("_").pop()) + 1;
       }
     },

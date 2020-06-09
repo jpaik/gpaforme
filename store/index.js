@@ -70,6 +70,7 @@ export const state = () => ({
   GPA_TYPES,
   GPA_LEVELS,
   saving_state: 0,
+  migrating_data: false,
 });
 export const getters = {
   isAuthenticated(state) {
@@ -80,6 +81,9 @@ export const getters = {
   },
   getSavingState(state) {
     return state.saving_state;
+  },
+  getMigratingState(state) {
+    return state.migrating_data;
   },
   faunaKey(state) {
     return state.auth.user
@@ -143,6 +147,9 @@ export const mutations = {
   changeSaving(state, val) {
     state.saving_state = val;
   },
+  changeMigrating(state, val) {
+    state.migrating_data = val;
+  },
 };
 export const actions = {
   triggerSaving({ commit }) {
@@ -154,6 +161,11 @@ export const actions = {
     setTimeout(() => {
       commit("changeSaving", 0);
     }, Math.random() * 200 + 900);
+  },
+  logout({ dispatch }) {
+    dispatch("schools/clearData", null, { root: true });
+    dispatch("semesters/clearData", null, { root: true });
+    dispatch("classes/clearData", null, { root: true });
   },
 };
 

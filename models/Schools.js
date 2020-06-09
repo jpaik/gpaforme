@@ -1,7 +1,8 @@
-import { q, client } from "../helpers/db";
+import faunadb from "faunadb";
+const q = faunadb.query;
 
-export function addSchool(schoolData) {
-  const me = q.Identity();
+export async function addSchool(client, schoolData) {
+  const me = await client.query(q.Identity());
 
   return client
     .query(
@@ -16,21 +17,42 @@ export function addSchool(schoolData) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((e) => e);
 }
 
-export function getSchools() {
+export function getSchools(client) {
   return client
     .query(
       q.Map(q.Paginate(q.Match(q.Ref("indexes/all_schools"))), (ref) =>
         q.Get(ref)
       )
     )
-    .then((resp) => resp);
+    .then((resp) => {
+      if (resp.data) {
+        const schools = resp.data;
+        return schools.map((s) => {
+          return {
+            ...s.data,
+            id: s.ref.value.id,
+            ref: s.ref,
+          };
+        });
+      }
+      return [];
+    });
 }
 
-export function deleteSchool(school) {
+export function deleteSchool(client, school) {
   return client
     .query(
       q.Map(
@@ -49,7 +71,7 @@ export function deleteSchool(school) {
     .catch((err) => err);
 }
 
-export function updateSchoolName(schoolRefID, newName) {
+export function updateSchoolName(client, schoolRefID, newName) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("schools"), schoolRefID), {
@@ -58,11 +80,20 @@ export function updateSchoolName(schoolRefID, newName) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((err) => err);
 }
 
-export function updateSchoolGPAType(schoolRefID, gpaType) {
+export function updateSchoolGPAType(client, schoolRefID, gpaType) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("schools"), schoolRefID), {
@@ -71,6 +102,15 @@ export function updateSchoolGPAType(schoolRefID, gpaType) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((err) => err);
 }

@@ -189,6 +189,14 @@ export default {
       src: "~/plugins/webFontLoader.client.js",
     },
     {
+      src: "~/plugins/db.js",
+      ssr: false,
+    },
+    {
+      src: "~/plugins/faunaMigration.js",
+      ssr: false,
+    },
+    {
       src: "~/plugins/localStorage.js",
       ssr: false,
     },
@@ -215,6 +223,7 @@ export default {
    */
   auth: {
     redirect: {
+      home: "/",
       login: "/", // redirect user when not connected
       callback: "/auth/signedin",
     },

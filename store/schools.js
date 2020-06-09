@@ -27,19 +27,22 @@ export const mutations = {
       ...newData,
     });
   },
+  deleteAll(state) {
+    state.schools = [];
+  },
 };
 
 export const actions = {
-  getAllSchools({ commit, getters }) {
-    if (getters["isAuthenticated"]) {
-      getSchools.then((schools) => {
+  getAllSchools({ commit, rootGetters }) {
+    if (rootGetters["isAuthenticated"]) {
+      return getSchools(this.$faunaClient()).then((schools) => {
         commit("setSchools", schools);
       });
     }
   },
-  createSchool({ commit, getters, dispatch }, data) {
-    if (getters["isAuthenticated"]) {
-      addSchool(data).then((resp) => {
+  createSchool({ commit, getters, dispatch, rootGetters }, data) {
+    if (rootGetters["isAuthenticated"]) {
+      addSchool(this.$faunaClient(), data).then((resp) => {
         commit("addSchool", resp);
       });
     } else {
@@ -54,13 +57,13 @@ export const actions = {
       dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateSchoolScale({ commit, getters, dispatch }, scale) {
+  updateSchoolScale({ commit, getters, dispatch, rootGetters }, scale) {
     const currentSchool = getters["getActiveSchool"];
     const newData = {
       ...currentSchool,
       scale: scale,
     };
-    if (getters["isAuthenticated"]) {
+    if (rootGetters["isAuthenticated"]) {
       // Change
     } else {
       // Do localStorage
@@ -68,19 +71,22 @@ export const actions = {
       dispatch("triggerSaving", null, { root: true });
     }
   },
-  updateSchoolName({ commit, getters, dispatch }, name) {
+  updateSchoolName({ commit, getters, dispatch, rootGetters }, name) {
     const currentSchool = getters["getActiveSchool"];
     const newData = {
       ...currentSchool,
       name: name,
     };
-    if (getters["isAuthenticated"]) {
+    if (rootGetters["isAuthenticated"]) {
       // Change
     } else {
       // Do localStorage
       commit("updateSchool", newData);
       dispatch("triggerSaving", null, { root: true });
     }
+  },
+  clearData({ commit }) {
+    return commit("deleteAll");
   },
 };
 

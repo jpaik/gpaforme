@@ -1,14 +1,14 @@
-import { q, client } from "../helpers/db";
+import faunadb from "faunadb";
+const q = faunadb.query;
 
-export function addClass(semesterID, classData) {
-  const me = q.Identity();
-
+export async function addClass(client, semesterRef, classData) {
+  const me = await client.query(q.Identity());
   return client
     .query(
       q.Create(q.Collection("classes"), {
         data: {
           ...classData,
-          semester: q.Ref(q.Collections("semesters"), semesterID),
+          semester: semesterRef,
           owner: me,
         },
         permissions: {
@@ -17,11 +17,20 @@ export function addClass(semesterID, classData) {
         },
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((e) => e);
 }
 
-export function getClasses(semesterID) {
+export function getClasses(client, semesterID) {
   return client
     .query(q.Get(q.Ref(`collections/semesters/${semesterID}`)))
     .then((semester) => {
@@ -32,25 +41,46 @@ export function getClasses(semesterID) {
             (ref) => q.Get(ref)
           )
         )
-        .then((resp) => resp);
+        .then((resp) => {
+          if (resp.data) {
+            const classes = resp.data;
+            return classes.map((c) => {
+              return {
+                ...c.data,
+                id: c.ref.value.id,
+                ref: c.ref,
+              };
+            });
+          }
+          return [];
+        });
     })
     .catch((err) => err);
 }
 
-export function deleteClass(classID) {
+export function deleteClass(client, classID) {
   return client
     .query(q.Delete(classID))
     .then((resp) => resp)
     .catch((err) => err);
 }
 
-export function updateClass(classID, newClassData) {
+export function updateClass(client, classID, newClassData) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("classes"), classID), {
         data: newClassData,
       })
     )
-    .then((resp) => resp)
+    .then((resp) => {
+      if (resp) {
+        return {
+          ...resp.data,
+          id: resp.ref.value.id,
+          ref: resp.ref,
+        };
+      }
+      return resp;
+    })
     .catch((err) => err);
 }
