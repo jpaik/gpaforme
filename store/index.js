@@ -130,7 +130,13 @@ export const getters = {
     let totalCredits = 0;
     let earnedGrades = 0;
     classes
-      .filter((c) => semesters.some((s) => s.id === c.semester))
+      .filter((c) =>
+        semesters.some((s) => {
+          return getters["isAuthenticated"]
+            ? s.id === c.semester.value.id
+            : s.id === c.semester;
+        })
+      )
       .forEach((c) => {
         if (c.credits && c.grade && !isNaN(c.credits) && !isNaN(c.grade)) {
           totalCredits += parseFloat(c.credits);
@@ -152,15 +158,26 @@ export const mutations = {
   },
 };
 export const actions = {
-  triggerSaving({ commit }) {
+  triggerSaving({ commit }, value = null) {
     // 1 === loading, 2 === saved, 3 === hidden
-    commit("changeSaving", 1);
-    setTimeout(() => {
-      commit("changeSaving", 2);
-    }, Math.random() * 200 + 200);
-    setTimeout(() => {
-      commit("changeSaving", 0);
-    }, Math.random() * 200 + 900);
+    if (value !== null) {
+      if (value === 1) {
+        commit("changeSaving", value);
+      } else {
+        commit("changeSaving", value);
+        setTimeout(() => {
+          commit("changeSaving", 0);
+        }, 700);
+      }
+    } else {
+      commit("changeSaving", 1);
+      setTimeout(() => {
+        commit("changeSaving", 2);
+      }, Math.random() * 200 + 200);
+      setTimeout(() => {
+        commit("changeSaving", 0);
+      }, Math.random() * 200 + 900);
+    }
   },
   logout({ dispatch }) {
     dispatch("schools/clearData", null, { root: true });

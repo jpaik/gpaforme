@@ -30,7 +30,29 @@ export async function addClass(client, semesterRef, classData) {
     .catch((e) => e);
 }
 
-export function getClasses(client, semesterID) {
+export function getAllClasses(client) {
+  return client
+    .query(
+      q.Map(q.Paginate(q.Match(q.Ref("indexes/all_classes"))), (ref) =>
+        q.Get(ref)
+      )
+    )
+    .then((resp) => {
+      if (resp.data) {
+        const classes = resp.data;
+        return classes.map((c) => {
+          return {
+            ...c.data,
+            id: c.ref.value.id,
+            ref: c.ref,
+          };
+        });
+      }
+      return [];
+    })
+    .catch((err) => err);
+}
+export function getClassesForSemester(client, semesterID) {
   return client
     .query(q.Get(q.Ref(`collections/semesters/${semesterID}`)))
     .then((semester) => {
@@ -58,9 +80,9 @@ export function getClasses(client, semesterID) {
     .catch((err) => err);
 }
 
-export function deleteClass(client, classID) {
+export function deleteClass(client, classRef) {
   return client
-    .query(q.Delete(classID))
+    .query(q.Delete(classRef))
     .then((resp) => resp)
     .catch((err) => err);
 }

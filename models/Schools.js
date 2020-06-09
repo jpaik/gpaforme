@@ -52,21 +52,16 @@ export function getSchools(client) {
     });
 }
 
-export function deleteSchool(client, school) {
+export function deleteSchool(client, schoolRef) {
   return client
     .query(
       q.Map(
-        q.Paginate(
-          q.Match(
-            q.Index("semesters_by_school"),
-            q.Ref(q.Collections("semesters"), school.ref.value.id)
-          )
-        ),
+        q.Paginate(q.Match(q.Index("semesters_by_school"), schoolRef)),
         q.Lambda("X", q.Delete(q.Select("ref", q.Get(q.Var("X")))))
       )
     )
     .then(() => {
-      return client.query(q.Delete(school.ref));
+      return client.query(q.Delete(schoolRef));
     })
     .catch((err) => err);
 }
@@ -93,7 +88,7 @@ export function updateSchoolName(client, schoolRefID, newName) {
     .catch((err) => err);
 }
 
-export function updateSchoolGPAType(client, schoolRefID, gpaType) {
+export function updateSchoolScale(client, schoolRefID, gpaType) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("schools"), schoolRefID), {

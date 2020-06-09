@@ -4,18 +4,9 @@ import { checkOldLocalStorage, convertOldToNew } from "./lsMigration";
 const LS_KEY = "gpaforme";
 
 function getAuthenticatedUserData(store) {
-  store.dispatch("schools/getAllSchools").then(() => {
-    const activeSchool = store.getters["schools/getActiveSchool"];
-    if (activeSchool && activeSchool.id) {
-      store
-        .dispatch("semesters/getSemestersForSchool", activeSchool.id)
-        .then(() => {
-          const activeSemester = store.getters["semesters/getActiveSemester"];
-          console.log(activeSemester.id);
-          store.dispatch("classes/getClassesForSemester", activeSemester.id);
-        });
-    }
-  });
+  store.dispatch("schools/getAllSchools");
+  store.dispatch("semesters/getAllSemesters");
+  store.dispatch("classes/getAllClasses");
   return false;
 }
 

@@ -1,4 +1,10 @@
-import { addSemester, getSemesters, deleteSemester } from "~/models/Semesters";
+import {
+  addSemester,
+  getSemestersForSchool,
+  getAllSemesters,
+  deleteSemester,
+  updateSemester,
+} from "~/models/Semesters";
 
 export const state = () => ({
   semesters: [],
@@ -65,8 +71,16 @@ export const mutations = {
 export const actions = {
   getSemestersForSchool({ commit, rootGetters }, schoolId) {
     if (rootGetters["isAuthenticated"]) {
-      console.log("Get Semesters for School");
-      return getSemesters(this.$faunaClient(), schoolId).then((semesters) => {
+      return getSemestersForSchool(this.$faunaClient(), schoolId).then(
+        (semesters) => {
+          commit("setSemesters", semesters);
+        }
+      );
+    }
+  },
+  getAllSemesters({ commit, rootGetters }) {
+    if (rootGetters["isAuthenticated"]) {
+      return getAllSemesters(this.$faunaClient()).then((semesters) => {
         commit("setSemesters", semesters);
       });
     }
@@ -76,23 +90,24 @@ export const actions = {
    * @param {*} data expects school and rest of data
    */
   createSemester({ commit, getters, rootGetters, dispatch }, schoolId) {
-    const activeSchoolId =
-      schoolId || rootGetters["schools/getActiveSchool"].id;
+    const activeSchool = schoolId || rootGetters["schools/getActiveSchool"];
     const semesterData = {
       name: "",
-      school: activeSchoolId,
+      school: activeSchool.id,
       active: false,
     };
     if (rootGetters["isAuthenticated"]) {
-      addSemester(this.$faunaClient(), activeSchoolId, semesterData).then(
+      dispatch("triggerSaving", 1, { root: true });
+      addSemester(this.$faunaClient(), activeSchool.ref, semesterData).then(
         (resp) => {
           commit("addSemester", resp);
+          dispatch("triggerSaving", 2, { root: true });
         }
       );
     } else {
       // Do localStorage
       let latestSemesters = [
-        ...getters["getSemestersForSchool"](activeSchoolId),
+        ...getters["getSemestersForSchool"](activeSchool.id),
       ];
       let latestSemesterId = 0;
       if (latestSemesters.length) {
@@ -103,17 +118,20 @@ export const actions = {
       }
       const newSemester = {
         ...semesterData,
-        id: activeSchoolId + "_" + (latestSemesterId + 1),
+        id: activeSchool.id + "_" + (latestSemesterId + 1),
       };
       commit("addSemester", newSemester);
       dispatch("classes/createClass", newSemester.id, { root: true });
       dispatch("triggerSaving", null, { root: true });
     }
   },
-  deleteSemester({ commit, rootGetters, dispatch }, semesterId) {
+  deleteSemester({ commit, getters, rootGetters, dispatch }, semesterId) {
     if (rootGetters["isAuthenticated"]) {
-      deleteSemester(this.$faunaClient(), semesterId).then((resp) => {
-        commit("deleteSemester", resp);
+      const semesterRef = getters["getSemesterById"](semesterId).ref;
+      dispatch("triggerSaving", 1, { root: true });
+      deleteSemester(this.$faunaClient(), semesterRef).then(() => {
+        commit("deleteSemester", semesterId);
+        dispatch("triggerSaving", 2, { root: true });
       });
     } else {
       // Do localStorage
@@ -136,7 +154,24 @@ export const actions = {
       active: true,
     };
     if (rootGetters["isAuthenticated"]) {
-      // Change
+      if (currentSemester) {
+        commit("updateSemester", changeCurrentActive); // Do this early so there's no input lag
+        updateSemester(
+          this.$faunaClient(),
+          changeCurrentActive.id,
+          changeCurrentActive
+        ).then(() => {
+          // commit("updateSemester", resp);
+        });
+      }
+      commit("updateSemester", changeNewActive); // Do this early so there's no input lag
+      updateSemester(
+        this.$faunaClient(),
+        changeNewActive.id,
+        changeNewActive
+      ).then(() => {
+        // commit("updateSemester", resp);
+      });
     } else {
       // Do localStorage
       if (currentSemester) {
@@ -155,7 +190,13 @@ export const actions = {
       name: newName,
     };
     if (rootGetters["isAuthenticated"]) {
-      // Change
+      dispatch("triggerSaving", 1, { root: true });
+      updateSemester(this.$faunaClient(), toUpdateData.id, toUpdateData).then(
+        (resp) => {
+          commit("updateSemester", resp);
+          dispatch("triggerSaving", 2, { root: true });
+        }
+      );
     } else {
       // Do localStorage
       commit("updateSemester", toUpdateData);

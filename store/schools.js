@@ -1,4 +1,9 @@
-import { addSchool, getSchools } from "~/models/Schools";
+import {
+  addSchool,
+  getSchools,
+  updateSchoolName,
+  updateSchoolScale,
+} from "~/models/Schools";
 export const state = () => ({
   schools: [],
 });
@@ -64,7 +69,9 @@ export const actions = {
       scale: scale,
     };
     if (rootGetters["isAuthenticated"]) {
-      // Change
+      updateSchoolScale(this.$faunaClient(), newData.id, scale).then((resp) => {
+        commit("updateSchool", resp);
+      });
     } else {
       // Do localStorage
       commit("updateSchool", newData);
@@ -78,7 +85,9 @@ export const actions = {
       name: name,
     };
     if (rootGetters["isAuthenticated"]) {
-      // Change
+      updateSchoolName(this.$faunaClient(), newData.id, name).then((resp) => {
+        commit("updateSchool", resp);
+      });
     } else {
       // Do localStorage
       commit("updateSchool", newData);

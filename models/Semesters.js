@@ -30,7 +30,29 @@ export async function addSemester(client, schoolRef, semesterData) {
     .catch((e) => e);
 }
 
-export function getSemesters(client, schoolID) {
+export function getAllSemesters(client) {
+  return client
+    .query(
+      q.Map(q.Paginate(q.Match(q.Ref("indexes/all_semesters"))), (ref) =>
+        q.Get(ref)
+      )
+    )
+    .then((resp) => {
+      if (resp.data) {
+        const semesters = resp.data;
+        return semesters.map((s) => {
+          return {
+            ...s.data,
+            id: s.ref.value.id,
+            ref: s.ref,
+          };
+        });
+      }
+      return [];
+    })
+    .catch((err) => err);
+}
+export function getSemestersForSchool(client, schoolID) {
   return client
     .query(q.Get(q.Ref(`collections/schools/${schoolID}`)))
     .then((school) => {
@@ -58,32 +80,25 @@ export function getSemesters(client, schoolID) {
     .catch((err) => err);
 }
 
-export function deleteSemester(client, semester) {
+export function deleteSemester(client, semesterRef) {
   return client
     .query(
       q.Map(
-        q.Paginate(
-          q.Match(
-            q.Index("classes_by_semester"),
-            q.Ref(q.Collections("classes"), semester.ref.value.id)
-          )
-        ),
+        q.Paginate(q.Match(q.Index("classes_by_semester"), semesterRef)),
         q.Lambda("X", q.Delete(q.Select("ref", q.Get(q.Var("X")))))
       )
     )
     .then(() => {
-      return client.query(q.Delete(semester.ref));
+      return client.query(q.Delete(semesterRef));
     })
     .catch((err) => err);
 }
 
-export function updateSemesterName(client, semesterID, newName) {
+export function updateSemester(client, semesterID, newData) {
   return client
     .query(
       q.Update(q.Ref(q.Collection("semesters"), semesterID), {
-        data: {
-          name: newName,
-        },
+        data: newData,
       })
     )
     .then((resp) => {
