@@ -59,6 +59,17 @@
           </div>
         </template>
       </b-overlay>
+
+      <b-overlay :show="isInitLoading" no-wrap>
+        <template v-slot:overlay>
+          <div class="d-flex flex-column align-items-center">
+            <b-spinner variant="primary" label="Loading..."></b-spinner>
+            <h3 class="mt-3">Loading data from server.</h3>
+            <p>Please wait...</p>
+            <span class="sr-only">Please wait loading your data...</span>
+          </div>
+        </template>
+      </b-overlay>
     </div>
   </div>
 </template>
@@ -91,6 +102,7 @@ export default {
       activeSemester: "semesters/getActiveSemester",
       dataSaved: "getSavingState",
       isMigrating: "getMigratingState",
+      isInitLoading: "getInitLoadingState",
     }),
     getSavingClass() {
       return this.dataSaved === 1 ? "warning" : "success";
