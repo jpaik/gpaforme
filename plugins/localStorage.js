@@ -93,6 +93,22 @@ function checkOrCreateDefaultClasses(store, key) {
   return currentStore;
 }
 
+function checkPersistedFaunaStorage() {
+  const ls = localStorage || window.localStorage;
+  if (ls) {
+    if (ls.getItem(LS_KEY) !== null) {
+      const gpaforme = JSON.parse(ls.getItem(LS_KEY));
+      if (gpaforme.schools && gpaforme.schools.schools) {
+        const sc = gpaforme.schools.schools[0];
+        // @ref doesn't exist in localStorage db
+        if (sc && sc.owner && sc.owner["@ref"] !== undefined) {
+          ls.removeItem(LS_KEY);
+        }
+      }
+    }
+  }
+}
+
 const requestIdleCallback =
   window.requestIdleCallback ||
   ((cb) => {
@@ -137,6 +153,10 @@ export default ({ store }) => {
         convertOldToNew();
       }
     }
+    if (!store.state.auth.loggedIn) {
+      checkPersistedFaunaStorage();
+    }
+
     createPersistedState({
       key: LS_KEY,
       paths: ["schools.schools", "semesters.semesters", "classes.classes"],
