@@ -55,16 +55,20 @@ async function migrateToFauna(store) {
 
     const semesters = gpaforme.semesters.semesters;
     await asyncForEach(semesters, async (s) => {
-      const newSemester = await addSemester(client, keyMap[s.school], s);
-      keyMap[s.id] = newSemester.ref;
-      store.commit("semesters/addSemester", newSemester);
+      if (s && s.school) {
+        const newSemester = await addSemester(client, keyMap[s.school], s);
+        keyMap[s.id] = newSemester.ref;
+        store.commit("semesters/addSemester", newSemester);
+      }
     });
 
     const classes = gpaforme.classes.classes;
     await asyncForEach(classes, async (c) => {
-      const newClass = await addClass(client, keyMap[c.semester], c);
-      keyMap[c.id] = newClass.ref;
-      store.commit("classes/addClass", newClass);
+      if (c && c.semester) {
+        const newClass = await addClass(client, keyMap[c.semester], c);
+        keyMap[c.id] = newClass.ref;
+        store.commit("classes/addClass", newClass);
+      }
     });
     store.commit("changeMigrating", false);
   }
