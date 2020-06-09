@@ -23,10 +23,10 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.1",
     "faunadb": "^2.14.1",
-    "nuxt": "^2.8.0",
-    "vuex-persistedstate": "^3.0.1",
     "node-sass": "^4.14.1",
+    "nuxt": "^2.8.0",
     "sass-loader": "^7.3.1",
+    "vuex-persistedstate": "^3.0.1",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
