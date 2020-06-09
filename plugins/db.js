@@ -9,7 +9,6 @@ const client = (key) => {
 export default ({ app, store }, inject) => {
   window.onNuxtReady(() => {
     const newClient = client(store.getters["faunaKey"]);
-    console.log(newClient);
     inject("faunaClient", () => newClient);
     app.faunaClient = () => newClient;
   });

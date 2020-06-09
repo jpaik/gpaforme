@@ -5,7 +5,6 @@ import { addClass } from "~/models/Classes";
 
 export function checkLocalStorage() {
   const ls = localStorage || window.localStorage;
-  console.log("Checking localStorage");
   if (ls) {
     const gpaforme =
       ls.getItem("gpaforme") !== null
@@ -50,17 +49,14 @@ async function migrateToFauna(store) {
     const schools = gpaforme.schools.schools;
     await asyncForEach(schools, async (s) => {
       const newSchool = await addSchool(client, s);
-      console.log(newSchool);
       keyMap[s.id] = newSchool.ref;
       store.commit("schools/addSchool", newSchool);
     });
-    console.log(keyMap);
 
     const semesters = gpaforme.semesters.semesters;
     await asyncForEach(semesters, async (s) => {
       const newSemester = await addSemester(client, keyMap[s.school], s);
       keyMap[s.id] = newSemester.ref;
-      console.log(newSemester);
       store.commit("semesters/addSemester", newSemester);
     });
 
@@ -68,7 +64,6 @@ async function migrateToFauna(store) {
     await asyncForEach(classes, async (c) => {
       const newClass = await addClass(client, keyMap[c.semester], c);
       keyMap[c.id] = newClass.ref;
-      console.log(newClass);
       store.commit("classes/addClass", newClass);
     });
     store.commit("changeMigrating", false);

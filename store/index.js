@@ -86,10 +86,8 @@ export const getters = {
     return state.migrating_data;
   },
   faunaKey(state) {
-    console.log(process.env.FAUNA_LOCAL_TOKEN);
-    console.log(state.auth.user);
     return state.auth.user
-      ? state.auth.user[process.env.FAUNA_LOCAL_TOKEN + "fauna_token"]
+      ? state.auth.user["https://gpafor.me/fauna_token"]
       : null;
   },
   getGPAS(state) {
