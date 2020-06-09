@@ -9,6 +9,9 @@ You can change the GPA scale, add semesters and classes, save all data, and have
 # install dependencies
 $ npm install
 
+# run faunaDB schema setup
+$ npm run setup-db
+
 # serve with hot reload at localhost:3000
 $ npm run dev
 
@@ -22,6 +25,7 @@ $ npm start
 - Auth0 serverless authentication
 - FaunaDB serverless database
 - Bootstrap 4 for CSS library
+- Lots of :coffee: + :heart:
 
 ## Comments
 I decided to use a serverless setup for this calculator.  
@@ -35,9 +39,9 @@ FaunaDB will be the serverless database used to store data.
 - ~~Add semesters into calculations.~~  
 - ~~Ability to rename semesters~~
 - ~~Show credit count next to semesters.~~  
-- Allow users to input custom GPA scale.  
-- Add Login and Sign up to keep track of GPA progress.  
-- Connect to Database 
-- Add a dashboard to see progress after the previous are implemented.  
+- ~~Add Login and Sign up to keep track of GPA progress~~.  
+- ~~Connect to Database (faunadb)~~ 
 - ~~Add images and favicon.~~  
 - ~~Buy a custom domain and add a simple logo.~~  
+- Allow users to input a custom GPA scale.  
+- Add option to keep track of multiple schools.  
