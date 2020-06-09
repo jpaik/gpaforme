@@ -38,8 +38,9 @@ export const mutations = {
 };
 
 export const actions = {
-  getAllSchools({ commit, rootGetters }) {
+  getAllSchools({ commit, rootGetters, dispatch }) {
     if (rootGetters["isAuthenticated"]) {
+      dispatch("triggerAllLoading", true, { root: true });
       return getSchools(this.$faunaClient()).then((schools) => {
         commit("setSchools", schools);
       });

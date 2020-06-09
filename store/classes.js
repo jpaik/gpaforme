@@ -54,10 +54,11 @@ export const actions = {
       );
     }
   },
-  getAllClasses({ commit, rootGetters }) {
+  getAllClasses({ commit, rootGetters, dispatch }) {
     if (rootGetters["isAuthenticated"]) {
       return getAllClasses(this.$faunaClient()).then((classes) => {
         commit("setClasses", classes);
+        dispatch("triggerAllLoading", false, { root: true });
       });
     }
   },
