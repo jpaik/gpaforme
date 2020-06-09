@@ -122,7 +122,7 @@ function localStorageEmpty() {
   if (ls.getItem(LS_KEY) !== null) {
     const gpaforme = JSON.parse(ls.getItem(LS_KEY));
     if (gpaforme.schools && gpaforme.schools.schools) {
-      return gpaforme.schools.schools.some((s) => s.id);
+      return !gpaforme.schools.schools.some((s) => s.id);
     }
     return true;
   }
@@ -132,7 +132,7 @@ function localStorageEmpty() {
 export default ({ store }) => {
   window.onNuxtReady(() => {
     // If localStorage key gpaforme hasn't been defined yet, check for migration
-    if (!localStorageEmpty()) {
+    if (localStorageEmpty()) {
       if (checkOldLocalStorage()) {
         convertOldToNew();
       }
