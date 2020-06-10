@@ -233,6 +233,12 @@ export default {
         domain: process.env.AUTH0_DOMAIN,
         clientId: process.env.AUTH0_CLIENT_ID,
         audience: process.env.AUTH0_AUDIENCE,
+        scope: ["openid", "profile", "email", "offline_access"],
+        responseType: "code",
+        grantType: "authorization_code",
+        endpoints: {
+          token: "https://cosinic.auth0.com/oauth/token",
+        },
       },
     },
   },
