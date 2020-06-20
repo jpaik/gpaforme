@@ -150,7 +150,7 @@ export const getters = {
               : parseFloat(c.grade)) * parseFloat(c.credits);
         }
       }, 0);
-    return (earnedGrades / totalCredits).toFixed(3);
+    return totalCredits ? (earnedGrades / totalCredits).toFixed(3) : "N/A";
   },
 };
 export const mutations = {
