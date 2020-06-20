@@ -19,7 +19,7 @@
                 class="form-control"
                 type="text"
                 name="name"
-                @blur="editClass($event, cls.id)"
+                @blur="editClass($event, cls.id, cls.name)"
                 @keyup.enter="$event.target.blur()"
               />
             </td>
@@ -29,7 +29,7 @@
                 class="form-control"
                 type="number"
                 name="credits"
-                @blur="editClass($event, cls.id)"
+                @blur="editClass($event, cls.id, cls.credits)"
                 @keyup.enter="$event.target.blur()"
               />
             </td>
@@ -40,7 +40,7 @@
                 :class="{
                   'form-control w-auto d-inline-block': true,
                 }"
-                @change="editClass($event, cls.id)"
+                @change="editClass($event, cls.id, cls.grade)"
               >
                 <option
                   v-for="option in gpaScale"
@@ -58,7 +58,7 @@
                 :class="{
                   'form-control w-auto d-inline-block': true,
                 }"
-                @change="editClass($event, cls.id)"
+                @change="editClass($event, cls.id, cls.level)"
               >
                 <option
                   v-for="option in getGPALevels"
@@ -123,14 +123,16 @@ export default {
     },
   },
   methods: {
-    editClass(event, classId) {
+    editClass(event, classId, oldValue) {
       const newValue = event.target.value;
       const changed = event.target.name;
-      const updatePackage = {
-        id: classId,
-      };
-      updatePackage[changed] = newValue;
-      this.$store.dispatch("classes/updateClassValue", updatePackage);
+      if (oldValue !== newValue) {
+        const updatePackage = {
+          id: classId,
+        };
+        updatePackage[changed] = newValue;
+        this.$store.dispatch("classes/updateClassValue", updatePackage);
+      }
     },
     addClass() {
       this.$store.dispatch("classes/createClass");
