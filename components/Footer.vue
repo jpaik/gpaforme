@@ -11,7 +11,7 @@
           </p>
         </div>
         <div class="col-12 col-xl-7">
-          <p class="text-center small">
+          <p class="text-center small mb-1">
             &copy; <a href="//cosinic.com" class="text-dark">Cosinic</a>
             {{ year }}.
             <a
@@ -20,6 +20,11 @@
               class="text-dark"
               >View source code on Github.</a
             >
+          </p>
+          <p class="text-center text-muted small">
+            Made with
+            <span class="text-danger" aria-label="love">&hearts;</span> by a
+            former Rutgers University student.
           </p>
         </div>
       </div>
