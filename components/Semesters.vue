@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="text-center mt-xl-4">Semesters</h4>
+    <h3 class="text-center mt-xl-4">Semesters</h3>
     <div class="list-group">
       <a
         v-for="(sem, semIdx) in semesters"
@@ -14,6 +14,7 @@
           active:
             activeSemester !== undefined ? sem.id === activeSemester.id : false,
         }"
+        aria-label="Click to change semester"
         @click.prevent="changeActiveSemester(sem.id)"
       >
         <span
@@ -49,9 +50,10 @@
           v-if="semesters.length"
           type="button"
           class="btn btn-danger btn-sm"
+          aria-label="Delete Semester"
           @click.stop.prevent="deleteSemester(sem.id)"
         >
-          <i class="far fa-trash"></i>
+          <i class="far fa-trash" aria-label="trash can"></i>
         </button>
       </a>
     </div>
@@ -60,9 +62,10 @@
         <button
           class="btn btn-outline-dark btn-sm"
           type="button"
+          aria-label="Add Semester"
           @click.stop.prevent="addSemester()"
         >
-          <i class="far fa-plus"></i> Add Semester
+          <i class="far fa-plus" aria-label="plus sign"></i> Add Semester
         </button>
       </div>
     </div>
