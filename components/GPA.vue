@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h4 class="text-center">GPA Model</h4>
+    <h3 class="text-center">GPA Model</h3>
     <div class="text-center pb-3">
       <select
         class="form-control w-auto d-inline-block"
+        aria-label="select a gpa scale"
         @change="changeGPAType($event)"
       >
         <option

@@ -19,6 +19,7 @@
                 class="form-control"
                 type="text"
                 name="name"
+                aria-label="edit class name"
                 @blur="editClass($event, cls.id, cls.name)"
                 @keyup.enter="$event.target.blur()"
               />
@@ -29,6 +30,7 @@
                 class="form-control"
                 type="number"
                 name="credits"
+                aria-label="edit credits"
                 @blur="editClass($event, cls.id, cls.credits)"
                 @keyup.enter="$event.target.blur()"
               />
@@ -40,6 +42,7 @@
                 :class="{
                   'form-control w-auto d-inline-block': true,
                 }"
+                aria-label="select a grade"
                 @change="editClass($event, cls.id, cls.grade)"
               >
                 <option
@@ -58,6 +61,7 @@
                 :class="{
                   'form-control w-auto d-inline-block': true,
                 }"
+                aria-label="select highschool level"
                 @change="editClass($event, cls.id, cls.level)"
               >
                 <option
@@ -73,9 +77,10 @@
               <button
                 class="btn btn-danger"
                 type="button"
+                aria-label="Delete Class"
                 @click.stop.prevent="deleteClass(cls.id)"
               >
-                <i class="far fa-trash" aria-label="Delete"></i>
+                <i class="far fa-trash" aria-label="trashcan"></i>
               </button>
             </td>
           </tr>
@@ -87,9 +92,10 @@
         <button
           class="btn btn-outline-success w-100"
           type="button"
+          aria-label="Add Class"
           @click.stop.prevent="addClass()"
         >
-          <i class="far fa-plus"></i> Add Class
+          <i class="far fa-plus" aria-label="plus sign"></i> Add Class
         </button>
       </div>
     </div>

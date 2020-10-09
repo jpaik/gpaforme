@@ -13,6 +13,9 @@ export default {
    ** Headers of the page
    */
   head: {
+    htmlAttrs: {
+      lang: "en",
+    },
     title: site_title,
     meta: [
       {
@@ -267,8 +270,8 @@ export default {
       },
     },
     filenames: {
-      app: ({ isDev }) => (isDev ? "[name].js" : "[chunkhash].js"),
-      chunk: ({ isDev }) => (isDev ? "[name].js" : "[chunkhash].js"),
+      app: ({ isDev }) => (isDev ? "[name].js" : "[contenthash].js"),
+      chunk: ({ isDev }) => (isDev ? "[name].js" : "[contenthash].js"),
     },
     /*
      ** Run ESLint on save

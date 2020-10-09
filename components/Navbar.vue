@@ -1,7 +1,11 @@
 <template>
   <b-navbar toggleable="lg" type="light" variant="light" fixed="top">
     <a class="navbar-brand" href="/">
-      <img src="/logo.svg" class="img-fluid d-inline-block align-top" />
+      <img
+        src="/logo.svg"
+        class="img-fluid d-inline-block align-top"
+        alt="Gpa For Me Logo - graduation cap with calculator"
+      />
       GPA For Me
     </a>
 
