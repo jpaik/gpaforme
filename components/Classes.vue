@@ -52,6 +52,12 @@
                   :selected="parseFloat(option.value) === parseFloat(cls.grade)"
                   >{{ option.text }}</option
                 >
+                <option
+                  v-if="currentScale !== 'hs'"
+                  value="P"
+                  :selected="parseFloat(cls.grade) === 'P'"
+                  >P</option
+                >
               </select>
             </td>
             <td v-if="currentScale === 'hs'" class="text-center">
