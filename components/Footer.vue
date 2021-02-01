@@ -10,6 +10,8 @@
             >.<br />Otherwise, your data will be saved in your local storage.
           </p>
         </div>
+      </div>
+      <div class="row justify-content-center">
         <div class="col-12 col-xl-7">
           <p class="text-center small mb-1">
             &copy; <a href="//cosinic.com" class="text-dark">Cosinic</a>
